@@ -888,9 +888,9 @@ h3 {
 
 .gift-band {
   display: grid;
-  min-height: 340px;
+  min-height: 250px;
   align-items: center;
-  padding: clamp(32px, 5.5vw, 68px) clamp(18px, 4vw, 56px);
+  padding: clamp(28px, 4.5vw, 54px) clamp(18px, 4vw, 56px);
   background:
     linear-gradient(90deg, rgba(58, 38, 28, 0.9), rgba(58, 38, 28, 0.6)),
     url("/assets/editorial/category-flatlay-premium.jpg") center / cover;
@@ -898,8 +898,8 @@ h3 {
 }
 
 .gift-logo {
-  width: min(118px, 32vw);
-  margin-bottom: 20px;
+  width: min(92px, 26vw);
+  margin-bottom: 16px;
   filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.26));
 }
 
@@ -2031,9 +2031,13 @@ th {
   .benefit-grid,
   .metric-grid,
   .premium-metric-grid,
-  .admin-kpi-grid,
-  .editorial-marquee {
+  .admin-kpi-grid {
     grid-template-columns: 1fr;
+  }
+
+  .editorial-marquee {
+    grid-template-columns: repeat(2, 1fr);
+    min-height: 0;
   }
 
   .trust-strip article {
@@ -2081,9 +2085,14 @@ th {
   }
 
   .store-hero {
-    min-height: clamp(500px, 82vh, 620px);
-    padding-inline: 24px;
-    padding-block: 44px;
+    min-height: clamp(440px, 76vh, 560px);
+    padding-inline: 22px;
+    padding-block: 40px;
+  }
+
+  .hero-logo {
+    width: min(124px, 36vw);
+    margin-bottom: 18px;
   }
 
   .store-hero h1 {
@@ -2111,10 +2120,28 @@ th {
     grid-row: span 1;
   }
 
-  .hero-signature,
+  .gift-band {
+    min-height: 200px;
+    padding: 34px 22px;
+  }
+
+  .gift-logo {
+    width: 72px;
+    margin-bottom: 12px;
+  }
+
+  .editorial-marquee span {
+    padding: 14px 12px;
+    font-size: 0.95rem;
+  }
+
   .edit-grid,
   .service-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-signature {
+    display: none;
   }
 
   .toolbar,
@@ -2165,6 +2192,49 @@ th {
   .admin-product-actions {
     justify-content: flex-start;
   }
+}
+
+@media (max-width: 430px) {
+  .storefront-header {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .store-hero h1 {
+    font-size: clamp(2rem, 8.5vw, 2.5rem);
+  }
+
+  .category-showcase {
+    gap: 8px;
+    grid-auto-rows: minmax(118px, 44vw);
+  }
+
+  .product-grid {
+    gap: 10px;
+  }
+
+  .section {
+    padding: 40px 16px;
+  }
+
+  .editorial-marquee span {
+    padding: 12px 8px;
+    font-size: 0.82rem;
+    letter-spacing: 0;
+  }
+
+  .gift-band {
+    padding: 30px 18px;
+  }
+
+  .footer {
+    padding: 24px 18px;
+  }
+}
+
+/* Rede de seguranca: nunca deixar a pagina rolar na horizontal no celular */
+body {
+  overflow-x: hidden;
 }
 
 /* ============================================================
