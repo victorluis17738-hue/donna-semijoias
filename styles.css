@@ -903,8 +903,8 @@ h3 {
   align-items: center;
   padding: clamp(28px, 4.5vw, 54px) clamp(18px, 4vw, 56px);
   background:
-    linear-gradient(90deg, rgba(58, 38, 28, 0.9), rgba(58, 38, 28, 0.6)),
-    url("/assets/editorial/category-flatlay-premium.jpg") center / cover;
+    linear-gradient(90deg, rgba(25, 16, 11, 0.58), rgba(25, 16, 11, 0.05) 62%),
+    url("/assets/editorial/gift-editorial.jpg") center / cover;
   color: var(--white);
 }
 
