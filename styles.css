@@ -903,8 +903,8 @@ h3 {
   align-items: center;
   padding: clamp(28px, 4.5vw, 54px) clamp(18px, 4vw, 56px);
   background:
-    linear-gradient(90deg, rgba(25, 16, 11, 0.58), rgba(25, 16, 11, 0.05) 62%),
-    url("/assets/editorial/gift-editorial.jpg") center / cover;
+    radial-gradient(135% 130% at 82% 20%, rgba(201, 153, 92, 0.22), transparent 55%),
+    linear-gradient(120deg, #1b110c 0%, #3a2418 46%, #5a3a24 100%);
   color: var(--white);
 }
 
