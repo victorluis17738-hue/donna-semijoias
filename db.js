@@ -21,7 +21,14 @@ if (process.env.DATABASE_URL) {
   console.log('Banco: Postgres (DATABASE_URL) conectado.');
 } else {
   // Import tardio: em producao (com DATABASE_URL) o PGlite nem precisa estar instalado.
-  const { PGlite } = require('@electric-sql/pglite');
+  let PGlite;
+  try {
+    ({ PGlite } = require('@electric-sql/pglite'));
+  } catch (error) {
+    console.error('ERRO: DATABASE_URL nao esta definido e o PGlite (banco local) nao esta instalado.');
+    console.error('Em producao (Render), defina a variavel DATABASE_URL com a connection string do Supabase.');
+    throw error;
+  }
   const client = new PGlite(process.env.PGLITE_DIR || './pgdata');
   queryImpl = async (text, params) => {
     const result = await client.query(text, params);
