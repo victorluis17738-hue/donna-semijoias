@@ -265,9 +265,9 @@ button {
 .eyebrow {
   margin: 0 0 14px;
   color: var(--gold);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -293,7 +293,7 @@ h3 {
   padding: 0 22px;
   border: 1px solid transparent;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 600;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 0.76rem;
@@ -334,10 +334,10 @@ h3 {
 .store-hero {
   position: relative;
   display: grid;
-  min-height: clamp(650px, 86vh, 860px);
+  min-height: clamp(560px, 76vh, 760px);
   align-items: center;
   overflow: hidden;
-  padding: clamp(64px, 9vw, 118px) clamp(18px, 5vw, 72px);
+  padding: clamp(56px, 7vw, 100px) clamp(18px, 5vw, 64px);
   background: #17110e;
 }
 
@@ -386,9 +386,9 @@ h3 {
 }
 
 .store-hero h1 {
-  max-width: 780px;
+  max-width: 720px;
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 5.8vw, 5.25rem);
+  font-size: clamp(2.75rem, 5vw, 4.4rem);
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -482,7 +482,7 @@ h3 {
 }
 
 .section {
-  padding: clamp(58px, 8vw, 108px) clamp(18px, 4vw, 56px);
+  padding: clamp(44px, 6vw, 84px) clamp(18px, 4vw, 56px);
 }
 
 .section-header,
@@ -509,7 +509,7 @@ h3 {
 .section-heading h2,
 .contact-section h2 {
   font-family: var(--font-serif);
-  font-size: clamp(2.1rem, 4vw, 4.3rem);
+  font-size: clamp(1.8rem, 3vw, 2.9rem);
   font-weight: 400;
   text-transform: none;
 }
@@ -522,7 +522,7 @@ h3 {
 .category-showcase {
   display: grid;
   grid-template-columns: 1.2fr repeat(3, 1fr);
-  grid-auto-rows: minmax(150px, 12vw);
+  grid-auto-rows: minmax(130px, min(9.5vw, 172px));
   gap: 10px;
 }
 
@@ -597,8 +597,8 @@ h3 {
   inset: 0;
   content: "";
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.52)),
-    linear-gradient(90deg, rgba(58, 38, 28, 0.34), rgba(58, 38, 28, 0.04));
+    linear-gradient(180deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.44)),
+    linear-gradient(90deg, rgba(58, 38, 28, 0.24), rgba(58, 38, 28, 0.03));
 }
 
 .category-tile:first-child {
@@ -614,7 +614,7 @@ h3 {
   position: relative;
   z-index: 1;
   font-family: var(--font-serif);
-  font-size: clamp(1.02rem, 1.35vw, 1.4rem);
+  font-size: clamp(0.95rem, 1.1vw, 1.18rem);
   line-height: 1.15;
 }
 
@@ -638,7 +638,7 @@ h3 {
   grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1fr);
   gap: clamp(26px, 5vw, 70px);
   align-items: center;
-  padding: clamp(58px, 8vw, 110px) clamp(18px, 4vw, 56px);
+  padding: clamp(44px, 6vw, 84px) clamp(18px, 4vw, 56px);
   background:
     linear-gradient(90deg, var(--white), var(--off-white));
 }
@@ -649,9 +649,10 @@ h3 {
 
 .lookbook-media::before {
   position: absolute;
-  inset: -18px 18px 18px -18px;
+  inset: -12px;
   content: "";
   border: 1px solid rgba(185, 152, 99, 0.4);
+  pointer-events: none;
 }
 
 .lookbook-media img {
@@ -668,10 +669,11 @@ h3 {
 }
 
 .lookbook-content h2 {
-  max-width: 760px;
+  max-width: 620px;
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 5.8rem);
+  font-size: clamp(1.9rem, 3.4vw, 3.4rem);
   font-weight: 400;
+  line-height: 1.15;
 }
 
 .lookbook-content > p {
@@ -730,10 +732,11 @@ h3 {
 }
 
 .collection-story h2 {
-  max-width: 650px;
+  max-width: 560px;
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 5.8rem);
+  font-size: clamp(1.9rem, 3.4vw, 3.4rem);
   font-weight: 400;
+  line-height: 1.15;
 }
 
 .gift-band h2 {
@@ -753,7 +756,7 @@ h3 {
 
 .collection-story img {
   width: 100%;
-  height: 620px;
+  height: clamp(320px, 34vw, 440px);
   object-fit: cover;
 }
 
@@ -772,8 +775,9 @@ h3 {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: clamp(20px, 3vw, 32px);
+  grid-template-columns: repeat(auto-fit, minmax(190px, 240px));
+  justify-content: center;
+  gap: clamp(14px, 2vw, 24px);
 }
 
 .product-card {
@@ -795,7 +799,7 @@ h3 {
 
 .product-card img {
   width: 100%;
-  aspect-ratio: 1 / 1.18;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   transition: transform 260ms ease;
 }
@@ -808,19 +812,19 @@ h3 {
   position: absolute;
   left: 12px;
   top: 12px;
-  padding: 7px 10px;
+  padding: 5px 9px;
   background: rgba(255, 255, 255, 0.92);
   color: var(--brown-dark);
-  font-size: 0.7rem;
-  font-weight: 900;
+  font-size: 0.62rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .product-card-body {
   display: grid;
-  gap: 12px;
-  padding: 18px 0 0;
+  gap: 7px;
+  padding: 14px 0 0;
 }
 
 .product-card .product-eyebrow,
@@ -836,7 +840,7 @@ h3 {
 
 .product-card h3 {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: clamp(1.02rem, 1.1vw, 1.16rem);
   font-weight: 400;
   text-transform: none;
 }
@@ -851,7 +855,7 @@ h3 {
 .preview-card strong,
 .admin-product-item strong,
 #modalPrice {
-  font-size: 1.15rem;
+  font-size: 1.04rem;
 }
 
 .product-actions {
@@ -917,16 +921,16 @@ h3 {
 }
 
 .benefit-grid article {
-  min-height: 230px;
-  padding: 28px;
+  min-height: 160px;
+  padding: 26px;
   background: var(--off-white);
 }
 
 .benefit-grid span {
   display: block;
-  margin-bottom: 42px;
+  margin-bottom: 20px;
   color: var(--brown);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .benefit-grid h3 {
@@ -943,7 +947,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1fr);
   gap: clamp(28px, 5vw, 70px);
-  padding: clamp(58px, 8vw, 110px) clamp(18px, 4vw, 56px);
+  padding: clamp(44px, 6vw, 84px) clamp(18px, 4vw, 56px);
   background: var(--black);
   color: var(--white);
 }
@@ -957,7 +961,7 @@ h3 {
 .service-intro h2,
 .faq-section h2 {
   font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 5vw, 5rem);
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
   font-weight: 400;
 }
 
@@ -977,7 +981,7 @@ h3 {
 .service-grid article {
   display: grid;
   gap: 16px;
-  min-height: 230px;
+  min-height: 160px;
   align-content: end;
   padding: clamp(22px, 4vw, 34px);
   background:
@@ -987,15 +991,15 @@ h3 {
 
 .service-grid span {
   color: var(--gold);
-  font-size: 0.72rem;
-  font-weight: 900;
+  font-size: 0.7rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .service-grid strong {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-size: clamp(1.5rem, 2.6vw, 2.3rem);
   font-weight: 400;
 }
 
@@ -1024,8 +1028,8 @@ h3 {
 
 .faq-list summary {
   cursor: pointer;
-  padding: 20px 22px;
-  font-weight: 900;
+  padding: 18px 22px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1309,7 +1313,7 @@ select:focus {
   min-height: 100vh;
   background:
     linear-gradient(rgba(245, 240, 232, 0.72), rgba(245, 240, 232, 0.94)),
-    url("/assets/products/produto3.jpg") center / cover;
+    url("/assets/editorial/hero-luxury-campaign.jpg") center / cover;
 }
 
 .admin-auth-page {
@@ -2038,7 +2042,7 @@ th {
   }
 
   .collection-story img {
-    height: 430px;
+    height: 300px;
   }
 
   .modal-card > img {
@@ -2077,9 +2081,9 @@ th {
   }
 
   .store-hero {
-    min-height: 760px;
+    min-height: clamp(500px, 82vh, 620px);
     padding-inline: 24px;
-    padding-block: 48px;
+    padding-block: 44px;
   }
 
   .store-hero h1 {
@@ -2135,7 +2139,9 @@ th {
   }
 
   .product-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    justify-content: stretch;
   }
 
   .cart-panel {
