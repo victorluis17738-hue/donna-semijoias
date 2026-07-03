@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Donna Semijoias: aneis, brincos, colares e pulseiras com banho premium, garantia e atendimento personalizado."
+    />
+    <meta name="theme-color" content="#3a261c" />
+    <title>Donna Semijoias | Loja online de semijoias premium</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="apple-touch-icon" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preload" as="image" href="/assets/editorial/hero-luxury-campaign.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "JewelryStore",
+        "name": "Donna Semijoias",
+        "url": "https://donna-semijoias.local/",
+        "description": "Loja online de semijoias premium com curadoria elegante, garantia e atendimento personalizado.",
+        "priceRange": "$$",
+        "areaServed": "BR"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#colecao">Pular para produtos</a>
+    <div class="top-bar">Frete especial acima de R$ 299 | Garantia de 6 meses | Atendimento via WhatsApp</div>
+
+    <header class="site-header storefront-header">
+      <button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="brand-link brand-centered logo-link" href="/" aria-label="Donna Semijoias">
+        <img
+          class="brand-logo brand-logo-horizontal"
+          src="/assets/brand/donna-horizontal-brown.png"
+          alt="Donna Semijoias"
+          width="1807"
+          height="316"
+        />
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navegacao principal">
+        <a href="#categorias">Categorias</a>
+        <a href="#colecao">Colecao</a>
+        <a href="#presente">Presentes</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="wishlist-button" id="wishlistToggle" type="button" aria-label="Ver favoritos" aria-pressed="false">
+          Favoritos <span id="wishlistCount">0</span>
+        </button>
+        <button class="cart-button" id="cartToggle" type="button" aria-label="Abrir sacola">
+          Sacola <span id="cartCount">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="store-hero" id="home" aria-labelledby="heroTitle">
+        <img
+          class="store-hero-bg"
+          id="heroImage"
+          src="/assets/editorial/hero-luxury-campaign.jpg"
+          alt="Selecao editorial de semijoias Donna"
+          width="1600"
+          height="900"
+        />
+        <div class="store-hero-content">
+          <img
+            class="hero-logo"
+            src="/assets/brand/donna-stacked-white.png"
+            alt="Donna Semijoias"
+            width="889"
+            height="824"
+          />
+          <p class="eyebrow" id="heroEyebrow">Luxo acessivel para todos os dias</p>
+          <h1 id="heroTitle">Semijoias que fazem o detalhe parecer assinatura.</h1>
+          <p id="heroText">
+            Curadoria de pecas banhadas, versateis e elegantes para presentear,
+            combinar e usar com confianca do primeiro clique ao recebimento.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-light" href="#colecao">Comprar agora</a>
+            <a class="btn btn-ghost" href="#presente">Ver presentes</a>
+          </div>
+          <div class="hero-signature" aria-label="Destaques Donna">
+            <span>Banho premium</span>
+            <span>Curadoria autoral</span>
+            <span>Embalagem presenteavel</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="editorial-marquee" aria-label="Mensagem da marca">
+        <span>Nova colecao</span>
+        <span>Joias para todos os dias</span>
+        <span>Presente perfeito</span>
+        <span>Acabamento premium</span>
+      </section>
+
+      <section class="trust-strip" aria-label="Beneficios da loja">
+        <article>
+          <strong>Compra segura</strong>
+          <span>Atendimento humano e acompanhamento do pedido.</span>
+        </article>
+        <article>
+          <strong>Banho premium</strong>
+          <span>Pecas selecionadas com acabamento delicado.</span>
+        </article>
+        <article>
+          <strong>Garantia Donna</strong>
+          <span>6 meses de garantia e orientacoes de cuidado.</span>
+        </article>
+      </section>
+
+      <section class="section category-section" id="categorias" aria-labelledby="categoryTitle">
+        <div class="section-heading center">
+          <p class="eyebrow">Escolha por categoria</p>
+          <h2 id="categoryTitle">Encontre sua peca favorita</h2>
+        </div>
+        <div class="category-showcase" id="categoryGrid" aria-busy="true"></div>
+      </section>
+
+      <section class="lookbook-section" aria-labelledby="lookbookTitle">
+        <div class="lookbook-media">
+          <img id="lookbookImage" src="/assets/editorial/category-flatlay-premium.jpg" alt="Lookbook Donna com semijoias em composicao premium" loading="lazy" />
+        </div>
+        <div class="lookbook-content">
+          <p class="eyebrow">Shop the edit</p>
+          <h2 id="lookbookTitle">Uma vitrine com ritmo de editorial.</h2>
+          <p>
+            Em vez de apenas listar produtos, a Donna organiza desejos: pecas de impacto,
+            essenciais para o dia a dia, presentes prontos e combinacoes para montar um mix completo.
+          </p>
+          <div class="edit-grid">
+            <a href="#colecao" data-edit-category="Brincos">
+              <strong>Glow perto do rosto</strong>
+              <span>Brincos delicados e pontos de luz.</span>
+            </a>
+            <a href="#colecao" data-edit-category="Colares">
+              <strong>Camadas elegantes</strong>
+              <span>Colares finos para usar juntos.</span>
+            </a>
+            <a href="#colecao" data-edit-category="Pulseiras">
+              <strong>Detalhe de pulso</strong>
+              <span>Pulseiras leves com acabamento refinado.</span>
+            </a>
+            <a href="#presente">
+              <strong>Presente Donna</strong>
+              <span>Escolhas seguras para encantar.</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="collection-story" id="sobre">
+        <div>
+          <p class="eyebrow">Donna essencial</p>
+          <h2>Brilho discreto, presenca inesquecivel.</h2>
+          <p>
+            Uma selecao pensada para acompanhar gestos importantes: o presente
+            escolhido com carinho, a peca de todos os dias e o detalhe que
+            transforma uma producao simples em algo especial.
+          </p>
+          <a class="text-link" href="#colecao">Ver colecao</a>
+        </div>
+        <img id="storyImage" src="/assets/products/produto6.jpg" alt="Colecao Donna Essencial" loading="lazy" />
+      </section>
+
+      <section class="section product-section" id="colecao" aria-labelledby="collectionTitle">
+        <div class="section-heading product-heading">
+          <div>
+            <p class="eyebrow">Colecoes Donna</p>
+            <h2 id="collectionTitle">Descubra suas novas semijoias favoritas</h2>
+          </div>
+          <div class="toolbar" aria-label="Filtros de produtos">
+            <label>
+              Buscar
+              <input id="searchInput" type="search" placeholder="Nome, categoria ou detalhe" autocomplete="off" />
+            </label>
+            <label>
+              Ordenar
+              <select id="sortSelect">
+                <option value="featured">Destaques</option>
+                <option value="price-asc">Menor preco</option>
+                <option value="price-desc">Maior preco</option>
+                <option value="discount">Maiores descontos</option>
+                <option value="name">Nome A-Z</option>
+              </select>
+            </label>
+            <button class="filter-chip" id="favoritesFilter" type="button" aria-pressed="false">
+              Somente favoritos
+            </button>
+          </div>
+        </div>
+
+        <p class="result-count" id="resultCount" aria-live="polite"></p>
+
+        <div class="product-grid refined-grid" id="productGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="gift-band" id="presente">
+        <div>
+          <img
+            class="gift-logo"
+            src="/assets/brand/donna-seal-white.png"
+            alt="Donna Semijoias"
+            width="898"
+            height="844"
+            loading="lazy"
+          />
+          <p class="eyebrow">Para presentear</p>
+          <h2>Pecas que carregam significado.</h2>
+          <p>
+            Opcoes delicadas e sofisticadas para aniversarios, datas especiais
+            ou pequenos rituais de autocuidado, com orientacao para acertar no presente.
+          </p>
+          <a class="btn btn-light" href="#contato">Falar com consultora</a>
+        </div>
+      </section>
+
+      <section class="section proof-section" aria-labelledby="proofTitle">
+        <div class="section-heading center">
+          <p class="eyebrow">Confianca</p>
+          <h2 id="proofTitle">Tudo pensado para comprar com tranquilidade</h2>
+        </div>
+        <div class="benefit-grid">
+          <article>
+            <span>01</span>
+            <h3>Trocas simples</h3>
+            <p>Suporte para tamanho, combinacao e troca conforme politica da loja.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Cuidado com a peca</h3>
+            <p>Voce recebe orientacoes para conservar o brilho por mais tempo.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Atendimento direto</h3>
+            <p>Consultoria via WhatsApp para duvidas antes e depois da compra.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="service-suite" aria-labelledby="serviceTitle">
+        <div class="service-intro">
+          <p class="eyebrow">Experiencia Donna</p>
+          <h2 id="serviceTitle">Uma compra cuidada do clique ao brilho final.</h2>
+          <p>
+            O site agora organiza informacoes essenciais de forma clara: material,
+            garantia, cuidados, atendimento, entrega e troca. A cliente nao precisa
+            adivinhar nada antes de comprar.
+          </p>
+        </div>
+        <div class="service-grid">
+          <article>
+            <span>Garantia</span>
+            <strong>6 meses</strong>
+            <p>Contra defeitos de fabricacao, com suporte direto para avaliacao.</p>
+          </article>
+          <article>
+            <span>Atendimento</span>
+            <strong>WhatsApp</strong>
+            <p>Consultoria para combinar pecas, escolher presente e tirar duvidas.</p>
+          </article>
+          <article>
+            <span>Cuidados</span>
+            <strong>Guia Donna</strong>
+            <p>Orientacoes para conservar banho, brilho e acabamento por mais tempo.</p>
+          </article>
+          <article>
+            <span>Entrega</span>
+            <strong>Rastreavel</strong>
+            <p>Informacoes claras sobre prazo, separacao e envio do pedido.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="faq-section" aria-labelledby="faqTitle">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faqTitle">Duvidas antes de comprar?</h2>
+        </div>
+        <div class="faq-list">
+          <details open>
+            <summary>As pecas possuem garantia?</summary>
+            <p>Sim. A Donna oferece garantia de 6 meses contra defeitos de fabricacao.</p>
+          </details>
+          <details>
+            <summary>Como cuidar das semijoias?</summary>
+            <p>Evite contato com perfume, mar, piscina, cremes e produtos abrasivos.</p>
+          </details>
+          <details>
+            <summary>Posso comprar pelo WhatsApp?</summary>
+            <p>Sim. A sacola gera uma mensagem pronta para atendimento consultivo.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contato">
+        <div>
+          <p class="eyebrow">Atendimento</p>
+          <h2>Precisa de ajuda para escolher?</h2>
+          <p class="muted">
+            Envie uma mensagem e receba suporte sobre tamanhos, combinacoes,
+            disponibilidade, presentes e condicoes de entrega.
+          </p>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <label>
+            Nome
+            <input type="text" name="nome" autocomplete="name" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            Mensagem
+            <textarea name="mensagem" rows="4" required></textarea>
+          </label>
+          <button class="btn btn-dark" type="submit">Enviar mensagem</button>
+          <p class="form-message" id="contactMessage" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="cartTitle">
+      <div class="cart-panel" role="dialog" aria-modal="true">
+        <div class="cart-header">
+          <div>
+            <p class="eyebrow">Sua sacola</p>
+            <h2 id="cartTitle">Itens selecionados</h2>
+          </div>
+          <button class="icon-button" id="closeCart" type="button" aria-label="Fechar sacola">x</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-shipping" id="cartShipping" hidden>
+          <p id="shippingMessage"></p>
+          <div class="ship-track"><div class="ship-fill" id="shippingFill"></div></div>
+        </div>
+        <div class="cart-savings" id="cartSavings" hidden>
+          <span>Voce economiza</span>
+          <strong id="cartSavingsValue">R$ 0,00</strong>
+        </div>
+        <div class="cart-summary">
+          <span>Total</span>
+          <strong id="cartTotal">R$ 0,00</strong>
+        </div>
+        <a class="btn btn-dark full-button" id="checkoutLink" href="#contato">Finalizar com consultora</a>
+      </div>
+    </aside>
+
+    <div class="product-modal" id="productModal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="icon-button modal-close" id="closeModal" type="button" aria-label="Fechar detalhes">x</button>
+        <div class="modal-gallery">
+          <img class="modal-gallery-main" id="modalImage" src="/assets/products/produto1.jpg" alt="" />
+          <div class="modal-thumbs" id="modalThumbs"></div>
+        </div>
+        <div class="modal-content">
+          <span id="modalCategory"></span>
+          <h2 id="modalTitle"></h2>
+          <div class="modal-price-row" id="modalPriceRow"></div>
+          <p class="stock-line modal-stock" id="modalStock"></p>
+          <p id="modalDescription"></p>
+          <dl>
+            <div>
+              <dt>Detalhes</dt>
+              <dd id="modalDetails"></dd>
+            </div>
+            <div>
+              <dt>Garantia</dt>
+              <dd>6 meses contra defeitos de fabricacao.</dd>
+            </div>
+            <div>
+              <dt>Cuidados</dt>
+              <dd>Evite perfume, agua do mar e produtos abrasivos.</dd>
+            </div>
+          </dl>
+          <div class="product-actions">
+            <button class="btn btn-soft" id="modalWishlistButton" type="button">Favoritar</button>
+            <button class="btn btn-dark" id="modalAddButton" type="button">Adicionar a sacola</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <strong>Donna Semijoias</strong>
+      <span>2026. Elegancia em cada detalhe.</span>
+      <a href="#contato">Politica de trocas e atendimento</a>
+    </footer>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Voltar ao topo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+
+    <script>
+      const currency = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+
+      const FREE_SHIPPING_THRESHOLD = 299;
+      const LOW_STOCK_THRESHOLD = 3;
+
+      function loadStored(key, fallback) {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(key));
+          return Array.isArray(parsed) ? parsed : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      const state = {
+        products: [],
+        category: 'Todos',
+        query: '',
+        sort: 'featured',
+        cart: loadStored('donna-cart', []),
+        favorites: loadStored('donna-favorites', []),
+        showFavoritesOnly: false,
+        activeProduct: null,
+        activeImageIndex: 0,
+        whatsapp: '',
+        loaded: false
+      };
+
+      const fallbackImage = '/assets/products/produto1.jpg';
+      const categoryAliases = {
+        'Aneis': ['Aneis', 'An\u00e9is'],
+        'Todos': ['Todos']
+      };
+
+      const elements = {
+        productGrid: document.getElementById('productGrid'),
+        categoryGrid: document.getElementById('categoryGrid'),
+        searchInput: document.getElementById('searchInput'),
+        sortSelect: document.getElementById('sortSelect'),
+        favoritesFilter: document.getElementById('favoritesFilter'),
+        resultCount: document.getElementById('resultCount'),
+        cartDrawer: document.getElementById('cartDrawer'),
+        cartItems: document.getElementById('cartItems'),
+        cartCount: document.getElementById('cartCount'),
+        cartTotal: document.getElementById('cartTotal'),
+        cartShipping: document.getElementById('cartShipping'),
+        shippingMessage: document.getElementById('shippingMessage'),
+        shippingFill: document.getElementById('shippingFill'),
+        cartSavings: document.getElementById('cartSavings'),
+        cartSavingsValue: document.getElementById('cartSavingsValue'),
+        checkoutLink: document.getElementById('checkoutLink'),
+        productModal: document.getElementById('productModal'),
+        wishlistToggle: document.getElementById('wishlistToggle'),
+        wishlistCount: document.getElementById('wishlistCount'),
+        toastStack: document.getElementById('toastStack'),
+        backToTop: document.getElementById('backToTop')
+      };
+
+      const heartIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 4.2 12.9a4.6 4.6 0 0 1 6.5-6.5l1.3 1.3 1.3-1.3a4.6 4.6 0 0 1 6.5 6.5Z"/></svg>';
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[char]));
+      }
+
+      function normalizeText(value) {
+        return String(value || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase();
+      }
+
+      function imagesOf(product) {
+        const list = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
+        if (product.image) list.unshift(product.image);
+        const unique = [...new Set(list)];
+        return unique.length ? unique : [fallbackImage];
+      }
+
+      function imageMarkup(product, className = '') {
+        const image = imagesOf(product)[0];
+        return `<img class="${className}" src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />`;
+      }
+
+      function basePrice(product) {
+        return Number(product.price || 0);
+      }
+
+      function productPrice(product) {
+        const sale = Number(product.sale_price || 0);
+        return sale > 0 && sale < basePrice(product) ? sale : basePrice(product);
+      }
+
+      function isOnSale(product) {
+        const sale = Number(product.sale_price || 0);
+        return sale > 0 && sale < basePrice(product);
+      }
+
+      function discountPercent(product) {
+        if (!isOnSale(product)) return 0;
+        return Math.round((1 - productPrice(product) / basePrice(product)) * 100);
+      }
+
+      function stockOf(product) {
+        return Number(product.stock || 0);
+      }
+
+      function isOutOfStock(product) {
+        return stockOf(product) <= 0;
+      }
+
+      function isLowStock(product) {
+        const stock = stockOf(product);
+        return stock > 0 && stock <= LOW_STOCK_THRESHOLD;
+      }
+
+      function isFavorite(id) {
+        return state.favorites.includes(Number(id));
+      }
+
+      function priceRowMarkup(product) {
+        if (isOnSale(product)) {
+          return `
+            <div class="price-row is-sale">
+              <span class="price-now">${currency.format(productPrice(product))}</span>
+              <span class="price-old">${currency.format(basePrice(product))}</span>
+              <span class="price-discount">-${discountPercent(product)}%</span>
+            </div>`;
+        }
+        return `<div class="price-row"><span class="price-now">${currency.format(productPrice(product))}</span></div>`;
+      }
+
+      function stockLineMarkup(product) {
+        if (isOutOfStock(product)) return '<span class="stock-line stock-out">Esgotado</span>';
+        if (isLowStock(product)) return `<span class="stock-line stock-low">Últimas ${stockOf(product)} unidades</span>`;
+        return '<span class="stock-line stock-in">Disponível</span>';
+      }
+
+      function categoryMatches(product) {
+        if (state.category === 'Todos') return true;
+        const accepted = categoryAliases[state.category] || [state.category];
+        return accepted.map(normalizeText).includes(normalizeText(product.category));
+      }
+
+      function filteredProducts() {
+        const query = normalizeText(state.query);
+        return state.products
+          .filter((product) => categoryMatches(product))
+          .filter((product) => !state.showFavoritesOnly || isFavorite(product.id))
+          .filter((product) => {
+            if (!query) return true;
+            return [product.name, product.category, product.description, product.details].some((field) =>
+              normalizeText(field).includes(query)
+            );
+          })
+          .sort((a, b) => {
+            if (state.sort === 'price-asc') return productPrice(a) - productPrice(b);
+            if (state.sort === 'price-desc') return productPrice(b) - productPrice(a);
+            if (state.sort === 'discount') return discountPercent(b) - discountPercent(a) || Number(b.id) - Number(a.id);
+            if (state.sort === 'name') return String(a.name).localeCompare(String(b.name), 'pt-BR');
+            return Number(b.featured || 0) - Number(a.featured || 0) || Number(b.id) - Number(a.id);
+          });
+      }
+
+      function skeletonMarkup() {
+        return Array.from({ length: 8 }).map(() => `
+          <article class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line short"></div>
+          </article>
+        `).join('');
+      }
+
+      function updateResultCount(count) {
+        if (!elements.resultCount) return;
+        if (!state.loaded) {
+          elements.resultCount.textContent = '';
+          return;
+        }
+        const label = count === 1 ? '1 peça encontrada' : `${count} peças encontradas`;
+        elements.resultCount.textContent = state.showFavoritesOnly ? `${label} · favoritos` : label;
+      }
+
+      function productCardMarkup(product) {
+        const out = isOutOfStock(product);
+        const badges = [];
+        if (Number(product.featured)) badges.push('<span class="tag tag-featured">Destaque</span>');
+        if (isOnSale(product)) badges.push(`<span class="tag tag-promo">-${discountPercent(product)}%</span>`);
+        if (out) badges.push('<span class="tag tag-out">Esgotado</span>');
+        else if (isLowStock(product)) badges.push('<span class="tag tag-low">Últimas unidades</span>');
+
+        const favorite = isFavorite(product.id);
+        return `
+          <article class="product-card ${out ? 'is-out' : ''}">
+            <div class="product-media">
+              ${badges.length ? `<div class="product-badges">${badges.join('')}</div>` : ''}
+              <button class="wishlist-toggle ${favorite ? 'is-active' : ''}" type="button"
+                data-wishlist="${product.id}"
+                aria-pressed="${favorite}"
+                aria-label="${favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}">${heartIcon}</button>
+              <button class="product-image-link" type="button" data-view-product="${product.id}" aria-label="Ver detalhes de ${escapeHtml(product.name)}">
+                ${imageMarkup(product)}
+              </button>
+            </div>
+            <div class="product-card-body">
+              <span class="product-eyebrow">${escapeHtml(product.category)}</span>
+              <h3>${escapeHtml(product.name)}</h3>
+              <p>${escapeHtml(product.description)}</p>
+              ${priceRowMarkup(product)}
+              ${stockLineMarkup(product)}
+              <div class="product-actions">
+                <button class="btn btn-soft" type="button" data-view-product="${product.id}">Ver detalhes</button>
+                <button class="btn btn-dark" type="button" data-add-product="${product.id}" ${out ? 'disabled' : ''}>${out ? 'Esgotado' : 'Comprar'}</button>
+              </div>
+            </div>
+          </article>`;
+      }
+
+      function renderProducts() {
+        if (!state.loaded) {
+          elements.productGrid.innerHTML = skeletonMarkup();
+          updateResultCount(0);
+          return;
+        }
+
+        const products = filteredProducts();
+        updateResultCount(products.length);
+
+        if (!products.length) {
+          const message = state.showFavoritesOnly
+            ? 'Você ainda não favoritou nenhuma peça.'
+            : 'Ajuste a busca ou escolha outra categoria.';
+          elements.productGrid.innerHTML = `
+            <div class="empty-state">
+              <p class="eyebrow">Nenhum produto encontrado</p>
+              <h3>${message}</h3>
+              <button class="btn btn-soft" type="button" data-clear-filters>Limpar filtros</button>
+            </div>
+          `;
+          return;
+        }
+
+        elements.productGrid.innerHTML = products.map(productCardMarkup).join('');
+      }
+
+      let toastTimer = null;
+      function showToast(title, subtitle = '', icon = '✓') {
+        if (!elements.toastStack) return;
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<span class="toast-icon">${icon}</span><div><strong>${escapeHtml(title)}</strong>${subtitle ? `<span>${escapeHtml(subtitle)}</span>` : ''}</div>`;
+        elements.toastStack.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 260);
+        }, 3200);
+      }
+
+      function persistFavorites() {
+        localStorage.setItem('donna-favorites', JSON.stringify(state.favorites));
+      }
+
+      function renderFavoritesCount() {
+        if (elements.wishlistCount) elements.wishlistCount.textContent = state.favorites.length;
+      }
+
+      function toggleFavorite(id) {
+        const numericId = Number(id);
+        const product = state.products.find((item) => Number(item.id) === numericId);
+        const index = state.favorites.indexOf(numericId);
+        if (index >= 0) {
+          state.favorites.splice(index, 1);
+          showToast('Removido dos favoritos', product ? product.name : '', '♡');
+        } else {
+          state.favorites.push(numericId);
+          showToast('Adicionado aos favoritos', product ? product.name : '', '♥');
+        }
+        persistFavorites();
+        renderFavoritesCount();
+        renderProducts();
+        if (state.activeProduct && Number(state.activeProduct.id) === numericId) syncModalWishlist();
+      }
+
+      function persistCart() {
+        localStorage.setItem('donna-cart', JSON.stringify(state.cart));
+      }
+
+      function addToCart(id, quantity = 1) {
+        const product = state.products.find((item) => Number(item.id) === Number(id));
+        if (!product) return;
+
+        if (isOutOfStock(product)) {
+          showToast('Produto esgotado', product.name, '✕');
+          return;
+        }
+
+        const current = state.cart.find((item) => Number(item.id) === Number(id));
+        const currentQty = current ? current.quantity : 0;
+        const max = stockOf(product);
+
+        if (currentQty + quantity > max) {
+          if (current) current.quantity = max;
+          else state.cart.push({ id: product.id, quantity: max });
+          persistCart();
+          renderCart();
+          showToast('Estoque máximo atingido', `Apenas ${max} em estoque`, '!');
+          return;
+        }
+
+        if (current) current.quantity += quantity;
+        else state.cart.push({ id: product.id, quantity });
+
+        persistCart();
+        renderCart();
+        showToast('Adicionado à sacola', product.name, '✓');
+      }
+
+      function removeFromCart(id) {
+        state.cart = state.cart.filter((item) => Number(item.id) !== Number(id));
+        persistCart();
+        renderCart();
+      }
+
+      function changeQuantity(id, delta) {
+        const item = state.cart.find((cartItem) => Number(cartItem.id) === Number(id));
+        if (!item) return;
+
+        const product = state.products.find((p) => Number(p.id) === Number(id));
+        const max = product ? stockOf(product) : Infinity;
+
+        if (delta > 0 && item.quantity + delta > max) {
+          item.quantity = max;
+          showToast('Estoque máximo atingido', `Apenas ${max} em estoque`, '!');
+        } else {
+          item.quantity += delta;
+        }
+
+        if (item.quantity <= 0) removeFromCart(id);
+        persistCart();
+        renderCart();
+      }
+
+      function cartProducts() {
+        return state.cart
+          .map((item) => ({
+            ...item,
+            product: state.products.find((product) => Number(product.id) === Number(item.id))
+          }))
+          .filter((item) => item.product);
+      }
+
+      // Reconcilia a sacola salva no navegador com o estoque atual:
+      // remove itens esgotados/inexistentes e limita a quantidade ao disponivel.
+      function reconcileCartWithStock() {
+        let changed = false;
+        state.cart = state.cart.filter((item) => {
+          const product = state.products.find((p) => Number(p.id) === Number(item.id));
+          if (!product || isOutOfStock(product)) {
+            changed = true;
+            return false;
+          }
+          const max = stockOf(product);
+          if (item.quantity > max) {
+            item.quantity = max;
+            changed = true;
+          }
+          return true;
+        });
+        if (changed) persistCart();
+      }
+
+      function renderShipping(total) {
+        if (!elements.cartShipping) return;
+        if (total <= 0) {
+          elements.cartShipping.hidden = true;
+          return;
+        }
+        elements.cartShipping.hidden = false;
+        const pct = Math.min(100, (total / FREE_SHIPPING_THRESHOLD) * 100);
+        elements.shippingFill.style.width = `${pct}%`;
+        if (total >= FREE_SHIPPING_THRESHOLD) {
+          elements.shippingFill.classList.add('is-complete');
+          elements.shippingMessage.className = 'ship-unlocked';
+          elements.shippingMessage.textContent = 'Você garantiu o frete especial Donna!';
+        } else {
+          elements.shippingFill.classList.remove('is-complete');
+          elements.shippingMessage.className = '';
+          elements.shippingMessage.textContent = `Faltam ${currency.format(FREE_SHIPPING_THRESHOLD - total)} para o frete especial.`;
+        }
+      }
+
+      function renderSavings(savings) {
+        if (!elements.cartSavings) return;
+        if (savings > 0) {
+          elements.cartSavings.hidden = false;
+          elements.cartSavingsValue.textContent = currency.format(savings);
+        } else {
+          elements.cartSavings.hidden = true;
+        }
+      }
+
+      function renderCart() {
+        const items = cartProducts();
+        const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+        const total = items.reduce((sum, item) => sum + productPrice(item.product) * item.quantity, 0);
+        const originalTotal = items.reduce((sum, item) => sum + basePrice(item.product) * item.quantity, 0);
+        const savings = Math.max(0, originalTotal - total);
+
+        elements.cartCount.textContent = totalQuantity;
+        elements.cartTotal.textContent = currency.format(total);
+        renderShipping(total);
+        renderSavings(savings);
+
+        if (!items.length) {
+          elements.cartItems.innerHTML = '<p class="muted">Sua sacola está vazia.</p>';
+          elements.checkoutLink.href = '#colecao';
+          elements.checkoutLink.textContent = 'Escolher peças';
+          return;
+        }
+
+        elements.checkoutLink.textContent = 'Finalizar pelo WhatsApp';
+        elements.checkoutLink.href = buildWhatsappUrl(items, total, savings);
+        elements.cartItems.innerHTML = items.map((item) => `
+          <article class="cart-item">
+            ${imageMarkup(item.product)}
+            <div>
+              <strong>${escapeHtml(item.product.name)}</strong>
+              <span class="cart-item-line">
+                ${currency.format(productPrice(item.product))}
+                ${isOnSale(item.product) ? `<span class="price-old">${currency.format(basePrice(item.product))}</span>` : ''}
+              </span>
+              <div class="quantity-control">
+                <button type="button" data-qty="${item.id}" data-delta="-1" aria-label="Diminuir quantidade">-</button>
+                <span>${item.quantity}</span>
+                <button type="button" data-qty="${item.id}" data-delta="1" aria-label="Aumentar quantidade">+</button>
+              </div>
+            </div>
+            <button class="text-link" type="button" data-remove="${item.id}">Remover</button>
+          </article>
+        `).join('');
+      }
+
+      function buildWhatsappUrl(items, total, savings = 0) {
+        const lines = [
+          'Olá! Tenho interesse nesses produtos:',
+          ''
+        ];
+
+        items.forEach((item, index) => {
+          const price = productPrice(item.product);
+          lines.push(`${index + 1}. ${item.product.name}`);
+          lines.push(`Quantidade: ${item.quantity}`);
+          lines.push(`Preço: ${currency.format(price)}${isOnSale(item.product) ? ` (de ${currency.format(basePrice(item.product))})` : ''}`);
+          lines.push(`Subtotal: ${currency.format(price * item.quantity)}`);
+          lines.push('');
+        });
+
+        lines.push(`Total: ${currency.format(total)}`);
+        if (savings > 0) lines.push(`Economia total: ${currency.format(savings)}`);
+        lines.push('');
+        lines.push('Gostaria de finalizar meu pedido.');
+
+        const phone = state.whatsapp || '';
+        return `https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`;
+      }
+
+      function openCart() {
+        elements.cartDrawer.classList.add('open');
+        elements.cartDrawer.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeCart() {
+        elements.cartDrawer.classList.remove('open');
+        elements.cartDrawer.setAttribute('aria-hidden', 'true');
+      }
+
+      function renderModalGallery(product) {
+        const images = imagesOf(product);
+        state.activeImageIndex = Math.min(Math.max(0, state.activeImageIndex), images.length - 1);
+        const main = document.getElementById('modalImage');
+        main.src = images[state.activeImageIndex];
+        main.alt = product.name;
+        const thumbs = document.getElementById('modalThumbs');
+        thumbs.hidden = images.length <= 1;
+        thumbs.innerHTML = images.length <= 1 ? '' : images.map((image, index) => `
+          <button type="button" class="${index === state.activeImageIndex ? 'is-active' : ''}" data-thumb="${index}" aria-label="Ver imagem ${index + 1}">
+            <img src="${escapeHtml(image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />
+          </button>
+        `).join('');
+      }
+
+      function selectModalImage(index) {
+        if (!state.activeProduct) return;
+        state.activeImageIndex = Number(index);
+        renderModalGallery(state.activeProduct);
+      }
+
+      function syncModalWishlist() {
+        const button = document.getElementById('modalWishlistButton');
+        if (!button || !state.activeProduct) return;
+        button.textContent = isFavorite(state.activeProduct.id) ? 'Remover dos favoritos' : 'Favoritar';
+      }
+
+      function openProduct(id) {
+        const product = state.products.find((item) => Number(item.id) === Number(id));
+        if (!product) return;
+
+        state.activeProduct = product;
+        state.activeImageIndex = 0;
+        renderModalGallery(product);
+        document.getElementById('modalCategory').textContent = product.category;
+        document.getElementById('modalTitle').textContent = product.name;
+        document.getElementById('modalPriceRow').innerHTML = priceRowMarkup(product);
+
+        const stock = document.getElementById('modalStock');
+        stock.className = `stock-line modal-stock ${isOutOfStock(product) ? 'stock-out' : isLowStock(product) ? 'stock-low' : 'stock-in'}`;
+        stock.textContent = isOutOfStock(product)
+          ? 'Esgotado'
+          : isLowStock(product) ? `Últimas ${stockOf(product)} unidades` : 'Disponível';
+
+        document.getElementById('modalDescription').textContent = product.description || '';
+        document.getElementById('modalDetails').textContent = product.details || 'Banho premium, acabamento delicado e embalagem Donna.';
+
+        const addButton = document.getElementById('modalAddButton');
+        addButton.disabled = isOutOfStock(product);
+        addButton.textContent = isOutOfStock(product) ? 'Esgotado' : 'Adicionar à sacola';
+
+        syncModalWishlist();
+        elements.productModal.classList.add('open');
+        elements.productModal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeProduct() {
+        elements.productModal.classList.remove('open');
+        elements.productModal.setAttribute('aria-hidden', 'true');
+        state.activeProduct = null;
+      }
+
+      async function loadProducts() {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('Erro ao carregar produtos');
+        state.products = await response.json();
+        state.loaded = true;
+        reconcileCartWithStock();
+        renderProducts();
+        renderCart();
+        renderFavoritesCount();
+      }
+
+      async function loadStoreConfig() {
+        try {
+          const response = await fetch('/api/store-config');
+          const config = await response.json();
+          state.whatsapp = String(config.whatsapp || '').replace(/\D/g, '');
+        } catch (error) {
+          state.whatsapp = '';
+        }
+      }
+
+      function applySiteContent(content) {
+        state.siteContent = content || {};
+        const set = (id, prop, value) => {
+          const el = document.getElementById(id);
+          if (el && value) el[prop] = value;
+        };
+        set('heroImage', 'src', content.hero_image);
+        set('heroEyebrow', 'textContent', content.hero_eyebrow);
+        set('heroTitle', 'textContent', content.hero_title);
+        set('heroText', 'textContent', content.hero_text);
+        set('lookbookImage', 'src', content.lookbook_image);
+        set('storyImage', 'src', content.story_image);
+        const gift = document.querySelector('.gift-band');
+        if (gift && content.gift_image) {
+          gift.style.backgroundImage = `linear-gradient(90deg, rgba(58, 38, 28, 0.94), rgba(58, 38, 28, 0.78)), url("${content.gift_image}")`;
+        }
+      }
+
+      async function loadSiteContent() {
+        try {
+          const response = await fetch('/api/site-content');
+          applySiteContent(await response.json());
+        } catch (error) {
+          // Mantem o conteudo estatico como fallback.
+        }
+      }
+
+      function renderCategories(categories) {
+        const allImage = (state.siteContent && state.siteContent.showcase_all_image) || '/assets/editorial/category-flatlay-premium.jpg';
+        const tiles = [{ name: 'Todos', subtitle: 'Vitrine completa', image: allImage }, ...categories];
+        elements.categoryGrid.setAttribute('aria-busy', 'false');
+        elements.categoryGrid.innerHTML = tiles.map((cat) => {
+          const image = cat.image || allImage;
+          return `
+          <button class="category-tile ${state.category === cat.name ? 'active' : ''}" type="button" data-category="${escapeHtml(cat.name)}">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(cat.name)} Donna" loading="lazy" onerror="this.onerror=null;this.src='/assets/editorial/category-flatlay-premium.jpg'" />
+            <span>${escapeHtml(cat.name)}</span>
+            ${cat.subtitle ? `<small>${escapeHtml(cat.subtitle)}</small>` : ''}
+          </button>`;
+        }).join('');
+      }
+
+      async function loadCategories() {
+        try {
+          const response = await fetch('/api/categories');
+          const categories = await response.json();
+          state.categories = Array.isArray(categories) ? categories : [];
+        } catch (error) {
+          state.categories = [];
+        }
+        renderCategories(state.categories);
+      }
+
+      elements.categoryGrid.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-category]');
+        if (!button) return;
+        state.category = button.dataset.category;
+        elements.categoryGrid.querySelectorAll('.category-tile').forEach((tile) => {
+          tile.classList.toggle('active', tile === button);
+        });
+        renderProducts();
+        document.getElementById('colecao').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      elements.searchInput.addEventListener('input', (event) => {
+        state.query = event.target.value;
+        renderProducts();
+      });
+
+      elements.sortSelect.addEventListener('change', (event) => {
+        state.sort = event.target.value;
+        renderProducts();
+      });
+
+      document.body.addEventListener('click', (event) => {
+        const addButton = event.target.closest('[data-add-product]');
+        const viewButton = event.target.closest('[data-view-product]');
+        const wishlistButton = event.target.closest('[data-wishlist]');
+        const thumbButton = event.target.closest('[data-thumb]');
+        const editButton = event.target.closest('[data-edit-category]');
+        const clearButton = event.target.closest('[data-clear-filters]');
+        const removeButton = event.target.closest('[data-remove]');
+        const quantityButton = event.target.closest('[data-qty]');
+
+        if (addButton && !addButton.disabled) addToCart(addButton.dataset.addProduct);
+        if (viewButton) openProduct(viewButton.dataset.viewProduct);
+        if (wishlistButton) toggleFavorite(wishlistButton.dataset.wishlist);
+        if (thumbButton) selectModalImage(thumbButton.dataset.thumb);
+        if (editButton) {
+          state.category = editButton.dataset.editCategory;
+          elements.categoryGrid.querySelectorAll('.category-tile').forEach((tile) => {
+            tile.classList.toggle('active', tile.dataset.category === state.category);
+          });
+          renderProducts();
+        }
+        if (clearButton) {
+          state.query = '';
+          state.category = 'Todos';
+          elements.searchInput.value = '';
+          setFavoritesOnly(false);
+          elements.categoryGrid.querySelectorAll('.category-tile').forEach((tile) => {
+            tile.classList.toggle('active', tile.dataset.category === 'Todos');
+          });
+          renderProducts();
+        }
+        if (removeButton) removeFromCart(removeButton.dataset.remove);
+        if (quantityButton) changeQuantity(quantityButton.dataset.qty, Number(quantityButton.dataset.delta));
+      });
+
+      document.getElementById('menuButton').addEventListener('click', (event) => {
+        const expanded = event.currentTarget.getAttribute('aria-expanded') === 'true';
+        event.currentTarget.setAttribute('aria-expanded', String(!expanded));
+        document.getElementById('mainNav').classList.toggle('open', !expanded);
+      });
+
+      document.getElementById('cartToggle').addEventListener('click', openCart);
+      document.getElementById('closeCart').addEventListener('click', closeCart);
+      document.getElementById('closeModal').addEventListener('click', closeProduct);
+      document.getElementById('modalAddButton').addEventListener('click', () => {
+        if (state.activeProduct && !isOutOfStock(state.activeProduct)) {
+          addToCart(state.activeProduct.id);
+          closeProduct();
+        }
+      });
+      document.getElementById('modalWishlistButton').addEventListener('click', () => {
+        if (state.activeProduct) toggleFavorite(state.activeProduct.id);
+      });
+
+      function setFavoritesOnly(value) {
+        state.showFavoritesOnly = Boolean(value);
+        if (elements.favoritesFilter) {
+          elements.favoritesFilter.classList.toggle('is-active', state.showFavoritesOnly);
+          elements.favoritesFilter.setAttribute('aria-pressed', String(state.showFavoritesOnly));
+        }
+        if (elements.wishlistToggle) {
+          elements.wishlistToggle.setAttribute('aria-pressed', String(state.showFavoritesOnly));
+        }
+      }
+
+      elements.favoritesFilter.addEventListener('click', () => {
+        setFavoritesOnly(!state.showFavoritesOnly);
+        renderProducts();
+      });
+
+      elements.wishlistToggle.addEventListener('click', () => {
+        if (!state.favorites.length && !state.showFavoritesOnly) {
+          showToast('Nenhum favorito ainda', 'Toque no coração dos produtos', '♡');
+        }
+        setFavoritesOnly(!state.showFavoritesOnly);
+        renderProducts();
+        document.getElementById('colecao').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      if (elements.backToTop) {
+        window.addEventListener('scroll', () => {
+          elements.backToTop.classList.toggle('show', window.scrollY > 600);
+        }, { passive: true });
+        elements.backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      elements.cartDrawer.addEventListener('click', (event) => {
+        if (event.target === elements.cartDrawer) closeCart();
+      });
+
+      elements.productModal.addEventListener('click', (event) => {
+        if (event.target === elements.productModal) closeProduct();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeCart();
+          closeProduct();
+        }
+      });
+
+      document.getElementById('contactForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const data = Object.fromEntries(new FormData(form));
+        const message = document.getElementById('contactMessage');
+        message.textContent = 'Enviando...';
+
+        try {
+          const response = await fetch('/contato', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          if (!response.ok) throw new Error('Falha no envio');
+          form.reset();
+          message.textContent = 'Mensagem enviada com sucesso.';
+        } catch (error) {
+          message.textContent = 'Nao foi possivel enviar a mensagem. Tente novamente.';
+        }
+      });
+
+      renderProducts();
+      renderCart();
+      renderFavoritesCount();
+
+      loadSiteContent().then(loadCategories);
+
+      loadStoreConfig().then(loadProducts).catch(() => {
+        state.loaded = true;
+        elements.productGrid.innerHTML = '<p class="muted">Não foi possível carregar os produtos.</p>';
+      });
+    </script>
+  </body>
+</html>

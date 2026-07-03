@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso administrativo - Donna Semijoias</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+  </head>
+  <body class="auth-page admin-auth-page">
+    <main class="admin-auth-shell login-only-shell">
+      <section class="admin-auth-visual">
+        <a class="brand-link auth-brand logo-link" href="/" aria-label="Donna Semijoias">
+          <img
+            class="brand-logo brand-logo-horizontal"
+            src="/assets/brand/donna-horizontal-white.png"
+            alt="Donna Semijoias"
+          />
+        </a>
+        <div class="admin-auth-copy">
+          <p class="eyebrow">Portal interno</p>
+          <h1>Acesso administrativo</h1>
+          <p>
+            Ambiente reservado para manter catalogo, imagens e operacao da loja
+            com o mesmo cuidado da vitrine.
+          </p>
+        </div>
+        <div class="admin-auth-metrics" aria-label="Recursos do portal">
+          <article>
+            <strong>CRUD</strong>
+            <span>Produtos e imagens</span>
+          </article>
+          <article>
+            <strong>8h</strong>
+            <span>Sessao protegida</span>
+          </article>
+          <article>
+            <strong>/admin</strong>
+            <span>Rota reservada</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-auth-forms">
+        <div class="auth-card admin-login-card">
+          <p class="eyebrow">Area segura</p>
+          <h2>Entrar no painel</h2>
+          <p class="muted">
+            Use as credenciais administrativas configuradas no servidor.
+          </p>
+
+          <form id="loginForm">
+            <label>
+              E-mail
+              <input
+                type="email"
+                name="email"
+                autocomplete="username"
+                placeholder="admin@donna.local"
+                required
+              />
+            </label>
+            <label>
+              Senha
+              <input
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="Digite sua senha"
+                required
+              />
+            </label>
+            <button class="btn btn-dark" id="loginButton" type="submit">Entrar</button>
+            <p class="form-message" id="loginMessage" role="status"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const message = document.getElementById('loginMessage');
+        const button = document.getElementById('loginButton');
+        const data = Object.fromEntries(new FormData(form));
+
+        message.textContent = 'Validando acesso...';
+        button.disabled = true;
+        button.textContent = 'Entrando...';
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            window.location.href = result.redirect;
+            return;
+          }
+
+          message.textContent = result.error || 'Nao foi possivel entrar.';
+        } catch (error) {
+          message.textContent = 'Falha de conexao. Tente novamente.';
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Entrar';
+        }
+      });
+    </script>
+  </body>
+</html>

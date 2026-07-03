@@ -1,0 +1,11 @@
+node_modules/
+*.log
+*.err
+.env
+
+# Banco de dados local — nao versionar (o servidor cria/migra sozinho no deploy)
+database.db
+database.db.*
+
+# Backups de assets gerados localmente
+assets/brand/_backup/

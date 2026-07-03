@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendas - Portal Donna</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header admin-header">
+      <a class="brand-link admin-brand logo-link" href="/" aria-label="Donna Admin">
+        <img
+          class="brand-logo brand-logo-admin"
+          src="/assets/brand/donna-horizontal-brown.png"
+          alt="Donna Semijoias"
+        />
+        <span>Admin</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegacao administrativa">
+        <a href="/admin/produtos">Produtos</a>
+        <a class="active" href="/admin/vendas">Vendas</a>
+        <a href="/admin/conteudo">Conteudo</a>
+        <button class="nav-pill" id="logoutBtn" type="button">Sair</button>
+      </nav>
+    </header>
+
+    <main class="sales-page admin-sales-page">
+      <section class="admin-hero-panel sales-hero-panel">
+        <div>
+          <p class="eyebrow">Performance</p>
+          <h1>Resumo comercial</h1>
+          <p>
+            Acompanhe pedidos, itens vendidos, ticket medio e situacao das vendas
+            cadastradas no painel Donna.
+          </p>
+        </div>
+        <a class="btn btn-dark" href="/admin/produtos">Cadastrar produto</a>
+      </section>
+
+      <section class="metric-grid premium-metric-grid">
+        <article>
+          <span>Total vendido</span>
+          <strong id="totalSold">R$ 0,00</strong>
+          <small>Receita registrada</small>
+        </article>
+        <article>
+          <span>Pedidos</span>
+          <strong id="orderCount">0</strong>
+          <small>Vendas no historico</small>
+        </article>
+        <article>
+          <span>Itens</span>
+          <strong id="itemCount">0</strong>
+          <small>Unidades vendidas</small>
+        </article>
+        <article>
+          <span>Ticket medio</span>
+          <strong id="averageTicket">R$ 0,00</strong>
+          <small>Valor por pedido</small>
+        </article>
+      </section>
+
+      <section class="sales-insight-grid">
+        <article class="sales-insight-card">
+          <p class="eyebrow">Status</p>
+          <h2>Fluxo dos pedidos</h2>
+          <div class="status-bars" id="statusBars"></div>
+        </article>
+        <article class="sales-insight-card">
+          <p class="eyebrow">Operacao</p>
+          <h2>Checklist comercial</h2>
+          <ul class="admin-checklist">
+            <li>Conferir pedidos pagos antes da separacao.</li>
+            <li>Atualizar status de envio no atendimento.</li>
+            <li>Usar os produtos mais vendidos como destaque da vitrine.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="sales-form-card">
+        <div>
+          <p class="eyebrow">Registrar</p>
+          <h2>Nova venda</h2>
+        </div>
+        <form id="saleForm" class="sales-form-grid">
+          <label>
+            Produto
+            <select name="product_id" id="saleProduct" required></select>
+          </label>
+          <label>
+            Cliente
+            <input type="text" name="customer" placeholder="Nome do cliente" required />
+          </label>
+          <label>
+            Quantidade
+            <input type="number" name="quantity" min="1" step="1" value="1" required />
+          </label>
+          <label>
+            Status
+            <select name="status" id="saleStatus"></select>
+          </label>
+          <button class="btn btn-dark" type="submit">Registrar venda</button>
+        </form>
+        <label class="checkbox-line">
+          <input type="checkbox" id="reduceStock" checked />
+          Baixar do estoque automaticamente
+        </label>
+        <p class="form-message" id="saleMessage" role="status"></p>
+      </section>
+
+      <section class="sales-table-card premium-table-card">
+        <div class="table-toolbar">
+          <div>
+            <p class="eyebrow">Pedidos</p>
+            <h2>Historico de vendas</h2>
+          </div>
+          <div class="table-actions">
+            <input id="salesSearch" type="search" placeholder="Buscar cliente, produto ou status" />
+            <button class="ghost-button" id="exportCsv" type="button">Exportar CSV</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Qtd.</th>
+              <th>Status</th>
+              <th>Total</th>
+              <th>Data</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="salesRows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const currency = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+      const SALE_STATUSES = ['Pago', 'Separacao', 'Enviado', 'Entregue', 'Cancelado'];
+      let salesData = [];
+      let products = [];
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[char]));
+      }
+
+      function normalizeText(value) {
+        return String(value || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase();
+      }
+
+      function currencyFmt(value) {
+        return currency.format(Number(value || 0));
+      }
+
+      // O SQLite grava "YYYY-MM-DD HH:MM:SS" em UTC (sem fuso). Normalizamos para
+      // ISO com 'Z' para evitar Invalid Date (Safari) e deslocamento de dia (Chrome).
+      function formatSaleDate(value) {
+        const iso = String(value || '').replace(' ', 'T') + 'Z';
+        const date = new Date(iso);
+        return isNaN(date.getTime()) ? String(value || '') : date.toLocaleDateString('pt-BR');
+      }
+
+      function renderStatusBars(sales) {
+        const container = document.getElementById('statusBars');
+        const grouped = sales.reduce((map, sale) => {
+          map[sale.status] = (map[sale.status] || 0) + 1;
+          return map;
+        }, {});
+        const max = Math.max(...Object.values(grouped), 1);
+
+        container.innerHTML = Object.entries(grouped).map(([status, count]) => `
+          <div class="status-bar-row">
+            <span>${escapeHtml(status)}</span>
+            <div><i style="width:${Math.max(12, (count / max) * 100)}%"></i></div>
+            <strong>${count}</strong>
+          </div>
+        `).join('') || '<p class="muted">Nenhuma venda registrada.</p>';
+      }
+
+      function filteredSales() {
+        const query = normalizeText(document.getElementById('salesSearch').value);
+        if (!query) return salesData;
+        return salesData.filter((sale) =>
+          [sale.customer, sale.product_name, sale.status].some((field) => normalizeText(field).includes(query))
+        );
+      }
+
+      function statusSelectMarkup(sale) {
+        return `<select class="sale-status-select" data-status-id="${sale.id}" aria-label="Status da venda">${
+          SALE_STATUSES.map((status) => `<option value="${status}" ${status === sale.status ? 'selected' : ''}>${status}</option>`).join('')
+        }</select>`;
+      }
+
+      function renderSalesRows() {
+        const sales = filteredSales();
+        const rows = document.getElementById('salesRows');
+
+        if (!sales.length) {
+          rows.innerHTML = '<tr><td colspan="7">Nenhuma venda encontrada.</td></tr>';
+          return;
+        }
+
+        rows.innerHTML = sales.map((sale) => `
+          <tr>
+            <td>${escapeHtml(sale.customer)}</td>
+            <td>${escapeHtml(sale.product_name || 'Produto removido')}</td>
+            <td>${sale.quantity}</td>
+            <td>${statusSelectMarkup(sale)}</td>
+            <td>${currencyFmt(sale.total)}</td>
+            <td>${formatSaleDate(sale.created_at)}</td>
+            <td><button class="sale-delete" type="button" data-delete-sale="${sale.id}">Excluir</button></td>
+          </tr>
+        `).join('');
+      }
+
+      function renderMetrics() {
+        const active = salesData.filter((sale) => sale.status !== 'Cancelado');
+        const total = active.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+        const items = active.reduce((sum, sale) => sum + Number(sale.quantity || 0), 0);
+        const average = active.length ? total / active.length : 0;
+
+        document.getElementById('totalSold').textContent = currencyFmt(total);
+        document.getElementById('orderCount').textContent = salesData.length;
+        document.getElementById('itemCount').textContent = items;
+        document.getElementById('averageTicket').textContent = currencyFmt(average);
+        renderStatusBars(salesData);
+      }
+
+      async function loadSales() {
+        const response = await fetch('/api/sales');
+        salesData = await response.json();
+        renderMetrics();
+        renderSalesRows();
+      }
+
+      async function loadProducts() {
+        const response = await fetch('/api/products?includeDrafts=1');
+        products = await response.json();
+        const select = document.getElementById('saleProduct');
+        select.innerHTML = products.map((product) => {
+          const price = Number(product.sale_price) > 0 ? Number(product.sale_price) : Number(product.price || 0);
+          const stock = Number(product.stock || 0);
+          return `<option value="${product.id}">${escapeHtml(product.name)} \u2014 ${currencyFmt(price)}${stock <= 0 ? ' (sem estoque)' : ''}</option>`;
+        }).join('');
+      }
+
+      function populateStatusForm() {
+        document.getElementById('saleStatus').innerHTML = SALE_STATUSES
+          .map((status) => `<option value="${status}">${status}</option>`)
+          .join('');
+      }
+
+      document.getElementById('saleForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const message = document.getElementById('saleMessage');
+        const data = Object.fromEntries(new FormData(form));
+        message.textContent = 'Registrando...';
+
+        try {
+          const response = await fetch('/api/sales', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...data, reduce_stock: document.getElementById('reduceStock').checked })
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            message.textContent = 'Venda registrada com sucesso.';
+            form.reset();
+            form.elements.quantity.value = 1;
+            await Promise.all([loadSales(), loadProducts()]);
+            return;
+          }
+
+          message.textContent = result.error || 'Erro ao registrar a venda.';
+        } catch (error) {
+          message.textContent = 'Falha de conexao ao registrar a venda.';
+        }
+      });
+
+      document.getElementById('salesRows').addEventListener('change', async (event) => {
+        const select = event.target.closest('[data-status-id]');
+        if (!select) return;
+        await fetch(`/api/sales/${select.dataset.statusId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: select.value })
+        });
+        await loadSales();
+      });
+
+      document.getElementById('salesRows').addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-delete-sale]');
+        if (!button) return;
+        if (!confirm('Excluir esta venda do historico?')) return;
+        await fetch(`/api/sales/${button.dataset.deleteSale}`, { method: 'DELETE' });
+        await loadSales();
+      });
+
+      document.getElementById('exportCsv').addEventListener('click', () => {
+        const rows = filteredSales();
+        if (!rows.length) return;
+        const header = ['Cliente', 'Produto', 'Quantidade', 'Status', 'Total', 'Data'];
+        const escapeCsv = (value) => `"${String(value == null ? '' : value).replace(/"/g, '""')}"`;
+        const lines = rows.map((sale) => [
+          sale.customer,
+          sale.product_name || 'Produto removido',
+          sale.quantity,
+          sale.status,
+          Number(sale.total || 0).toFixed(2).replace('.', ','),
+          formatSaleDate(sale.created_at)
+        ].map(escapeCsv).join(';'));
+        const csv = '\ufeff' + [header.map(escapeCsv).join(';'), ...lines].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'vendas-donna.csv';
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById('salesSearch').addEventListener('input', renderSalesRows);
+
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/';
+      });
+
+      populateStatusForm();
+      loadProducts();
+      loadSales();
+    </script>
+  </body>
+</html>

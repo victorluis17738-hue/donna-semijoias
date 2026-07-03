@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produtos - Portal Donna</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header admin-header">
+      <a class="brand-link admin-brand logo-link" href="/admin" aria-label="Donna Admin">
+        <img
+          class="brand-logo brand-logo-admin"
+          src="/assets/brand/donna-horizontal-brown.png"
+          alt="Donna Semijoias"
+        />
+        <span>Portal</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegacao administrativa">
+        <a class="active" href="/admin/produtos">Produtos</a>
+        <a href="/admin/vendas">Vendas</a>
+        <a href="/admin/conteudo">Conteudo</a>
+        <button class="nav-pill" id="logoutBtn" type="button">Sair</button>
+      </nav>
+    </header>
+
+    <main class="admin-console">
+      <section class="admin-hero-panel">
+        <div>
+          <p class="eyebrow">Catalogo Donna</p>
+          <h1>Gestao de produtos</h1>
+          <p>
+            Cadastre, edite e organize fotos da vitrine publica sem expor nada
+            administrativo para a cliente final.
+          </p>
+        </div>
+        <div class="admin-kpi-grid">
+          <article>
+            <span>Produtos</span>
+            <strong id="productTotal">0</strong>
+          </article>
+          <article>
+            <span>Destaques</span>
+            <strong id="featuredTotal">0</strong>
+          </article>
+          <article>
+            <span>Em promoção</span>
+            <strong id="promoTotal">0</strong>
+          </article>
+          <article>
+            <span>Estoque total</span>
+            <strong id="stockTotal">0</strong>
+          </article>
+          <article>
+            <span>Esgotados</span>
+            <strong id="outOfStockTotal">0</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-layout admin-product-layout">
+        <section class="admin-panel">
+          <div class="admin-form-heading">
+            <div>
+              <p class="eyebrow">Cadastro</p>
+              <h1 id="formTitle">Novo produto</h1>
+            </div>
+            <button class="btn btn-soft" id="cancelEditBtn" type="button" hidden>Cancelar edicao</button>
+          </div>
+
+          <form class="product-form" id="productForm">
+            <input type="hidden" name="id" />
+            <div class="form-row">
+              <label>
+                Nome da peca
+                <input type="text" name="name" placeholder="Brinco Aura Dourada" required />
+              </label>
+              <label>
+                Categoria
+                <input list="categoryOptions" name="category" placeholder="Brincos" required />
+                <datalist id="categoryOptions"></datalist>
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                Preco
+                <input type="number" name="price" min="1" step="0.01" placeholder="149.90" required />
+              </label>
+              <label>
+                Preco promocional
+                <input type="number" name="sale_price" min="1" step="0.01" placeholder="Opcional" />
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                Estoque
+                <input type="number" name="stock" min="0" step="1" placeholder="0" />
+              </label>
+              <label>
+                Status
+                <select name="status">
+                  <option value="active">Publicado</option>
+                  <option value="draft">Rascunho</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Descricao curta
+              <textarea name="description" rows="3" placeholder="Texto para aparecer na vitrine." required></textarea>
+            </label>
+
+            <label>
+              Detalhes do produto
+              <textarea name="details" rows="4" placeholder="Banho, garantia, medidas, material e cuidados."></textarea>
+            </label>
+
+            <section class="image-manager" aria-labelledby="imageManagerTitle">
+              <div class="image-manager-header">
+                <div>
+                  <p class="eyebrow">Fotos</p>
+                  <h2 id="imageManagerTitle">Imagens do produto</h2>
+                </div>
+                <label class="btn btn-soft upload-button">
+                  Adicionar arquivos
+                  <input type="file" id="imageFiles" accept="image/*" multiple />
+                </label>
+              </div>
+
+              <div class="image-url-row">
+                <input id="imageUrlInput" type="url" placeholder="/assets/products/produto5.jpg ou URL externa" />
+                <button class="btn btn-light" id="addUrlBtn" type="button">Adicionar URL</button>
+              </div>
+
+              <div class="image-admin-grid" id="imageList"></div>
+              <p class="muted">A primeira foto e usada como imagem principal na loja. Use os botoes para reordenar.</p>
+            </section>
+
+            <div class="admin-switches">
+              <label class="checkbox-line">
+                <input type="checkbox" name="featured" />
+                Destacar na vitrine
+              </label>
+              <label class="checkbox-line">
+                <input type="checkbox" name="promo" />
+                Marcar como promocao
+              </label>
+            </div>
+
+            <button class="btn btn-dark" id="saveProductBtn" type="submit">Cadastrar produto</button>
+            <p class="form-message" id="productMessage" role="status"></p>
+          </form>
+        </section>
+
+        <aside class="admin-preview">
+          <div class="preview-card premium-preview-card">
+            <div class="preview-image-frame">
+              <img id="previewImage" src="/assets/products/produto5.jpg" alt="Previa do produto" />
+            </div>
+            <span id="previewCategory">Categoria</span>
+            <h2 id="previewName">Nome da peca</h2>
+            <p id="previewDescription">A previa acompanha o formulario em tempo real.</p>
+            <strong id="previewPrice">R$ 0,00</strong>
+            <div class="preview-notes">
+              <span id="previewStatus">Publicado</span>
+              <span id="previewImagesCount">0 fotos</span>
+            </div>
+          </div>
+        </aside>
+
+        <section class="admin-wide">
+          <div class="section-header admin-list-header">
+            <div>
+              <p class="eyebrow">Catalogo</p>
+              <h2>Produtos cadastrados</h2>
+            </div>
+            <div class="admin-toolbar">
+              <input id="adminSearch" type="search" placeholder="Buscar produto ou categoria" />
+              <select id="adminCategoryFilter">
+                <option value="Todos">Todas as categorias</option>
+              </select>
+            </div>
+          </div>
+          <div class="admin-product-list" id="adminProductList"></div>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const currency = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+      const fallbackImage = '/assets/products/produto5.jpg';
+      const form = document.getElementById('productForm');
+      const fileInput = document.getElementById('imageFiles');
+      const imageList = document.getElementById('imageList');
+      const adminSearch = document.getElementById('adminSearch');
+      const adminCategoryFilter = document.getElementById('adminCategoryFilter');
+      let productImages = [];
+      let adminProducts = [];
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[char]));
+      }
+
+      function normalizeText(value) {
+        return String(value || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase();
+      }
+
+      function imageSafe(src) {
+        return src || fallbackImage;
+      }
+
+      function updatePreview() {
+        const data = Object.fromEntries(new FormData(form));
+        const salePrice = Number(data.sale_price || 0);
+        const basePrice = Number(data.price || 0);
+        const price = salePrice > 0 && salePrice < basePrice ? salePrice : basePrice;
+        document.getElementById('previewName').textContent = data.name || 'Nome da peca';
+        document.getElementById('previewCategory').textContent = data.category || 'Categoria';
+        document.getElementById('previewDescription').textContent = data.description || 'A previa acompanha o formulario em tempo real.';
+        document.getElementById('previewPrice').textContent = currency.format(price);
+        document.getElementById('previewImage').src = imageSafe(productImages[0]);
+        document.getElementById('previewStatus').textContent = data.status === 'draft' ? 'Rascunho' : 'Publicado';
+        document.getElementById('previewImagesCount').textContent = `${productImages.length} foto${productImages.length === 1 ? '' : 's'}`;
+      }
+
+      function renderImageManager() {
+        if (!productImages.length) {
+          imageList.innerHTML = '<div class="admin-empty image-empty"><h3>Nenhuma foto adicionada</h3><p>Adicione uma imagem principal para salvar o produto.</p></div>';
+          updatePreview();
+          return;
+        }
+
+        imageList.innerHTML = productImages.map((image, index) => `
+          <article class="image-admin-item ${index === 0 ? 'is-main' : ''}">
+            <img src="${escapeHtml(image)}" alt="Foto ${index + 1}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />
+            <div class="image-admin-actions">
+              <span>${index === 0 ? 'Principal' : `Foto ${index + 1}`}</span>
+              <button type="button" data-image-up="${index}" ${index === 0 ? 'disabled' : ''}>Subir</button>
+              <button type="button" data-image-down="${index}" ${index === productImages.length - 1 ? 'disabled' : ''}>Descer</button>
+              <button type="button" data-image-main="${index}" ${index === 0 ? 'disabled' : ''}>Principal</button>
+              <button type="button" data-image-remove="${index}">Remover</button>
+            </div>
+          </article>
+        `).join('');
+        updatePreview();
+      }
+
+      function addImages(images) {
+        productImages = [...productImages, ...images].filter(Boolean);
+        renderImageManager();
+      }
+
+      function moveImage(index, delta) {
+        const next = index + delta;
+        if (next < 0 || next >= productImages.length) return;
+        [productImages[index], productImages[next]] = [productImages[next], productImages[index]];
+        renderImageManager();
+      }
+
+      function setMainImage(index) {
+        if (index <= 0) return;
+        const [image] = productImages.splice(index, 1);
+        productImages.unshift(image);
+        renderImageManager();
+      }
+
+      function removeImage(index) {
+        productImages.splice(index, 1);
+        renderImageManager();
+      }
+
+      function renderAdminStats(products) {
+        const stockTotal = products.reduce((sum, product) => sum + Number(product.stock || 0), 0);
+        const onSale = (product) => Number(product.sale_price || 0) > 0 && Number(product.sale_price) < Number(product.price || 0);
+        document.getElementById('productTotal').textContent = products.length;
+        document.getElementById('featuredTotal').textContent = products.filter((product) => Number(product.featured)).length;
+        document.getElementById('promoTotal').textContent = products.filter((product) => Number(product.promo) || onSale(product)).length;
+        document.getElementById('stockTotal').textContent = stockTotal;
+        document.getElementById('outOfStockTotal').textContent = products.filter((product) => Number(product.stock || 0) <= 0).length;
+      }
+
+      function renderCategoryOptions(products) {
+        const categories = [...new Set(products.map((product) => product.category))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+        document.getElementById('categoryOptions').innerHTML = categories.map((category) => `<option value="${escapeHtml(category)}"></option>`).join('');
+        const current = adminCategoryFilter.value || 'Todos';
+        adminCategoryFilter.innerHTML = '<option value="Todos">Todas as categorias</option>' + categories.map((category) => (
+          `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+        )).join('');
+        adminCategoryFilter.value = categories.includes(current) ? current : 'Todos';
+      }
+
+      function filteredAdminProducts() {
+        const query = normalizeText(adminSearch.value);
+        const category = adminCategoryFilter.value;
+        return adminProducts.filter((product) => {
+          const matchesCategory = category === 'Todos' || product.category === category;
+          const matchesSearch = !query || [product.name, product.category, product.description].some((field) =>
+            normalizeText(field).includes(query)
+          );
+          return matchesCategory && matchesSearch;
+        });
+      }
+
+      function renderAdminProducts() {
+        const list = document.getElementById('adminProductList');
+        const products = filteredAdminProducts();
+
+        if (!products.length) {
+          list.innerHTML = '<div class="admin-empty"><h3>Nenhum produto encontrado</h3><p>Ajuste a busca ou cadastre uma nova peca para a vitrine.</p></div>';
+          return;
+        }
+
+        list.innerHTML = products.map((product) => {
+          const price = Number(product.price || 0);
+          const sale = Number(product.sale_price || 0);
+          const onSale = sale > 0 && sale < price;
+          const stock = Number(product.stock || 0);
+          const priceHtml = onSale
+            ? `<strong>${currency.format(sale)}</strong><span class="admin-price-old">${currency.format(price)}</span>`
+            : `<strong>${currency.format(price)}</strong>`;
+          const stockTag = stock <= 0
+            ? '<em class="tag-out">Esgotado</em>'
+            : stock <= 3 ? `<em class="tag-low">Últimas ${stock}</em>` : `<em>${stock} em estoque</em>`;
+          return `
+          <article class="admin-product-item">
+            <img src="${escapeHtml(imageSafe(product.image))}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />
+            <div>
+              <div class="admin-product-meta">
+                <span>${escapeHtml(product.category)}</span>
+                ${Number(product.featured) ? '<em>Destaque</em>' : ''}
+                ${product.status === 'draft' ? '<em>Rascunho</em>' : ''}
+                ${(Number(product.promo) || onSale) ? '<em>Promoção</em>' : ''}
+                ${stockTag}
+              </div>
+              <h3>${escapeHtml(product.name)}</h3>
+              <p>${escapeHtml(product.description)}</p>
+              <div class="admin-price-line">${priceHtml}</div>
+            </div>
+            <div class="admin-product-actions">
+              <button class="btn btn-soft" type="button" data-edit-product="${product.id}">Editar</button>
+              <button class="btn btn-light" type="button" data-delete-product="${product.id}">Excluir</button>
+            </div>
+          </article>`;
+        }).join('');
+      }
+
+      function resetForm() {
+        form.reset();
+        form.elements.id.value = '';
+        productImages = [];
+        document.getElementById('formTitle').textContent = 'Novo produto';
+        document.getElementById('saveProductBtn').textContent = 'Cadastrar produto';
+        document.getElementById('cancelEditBtn').hidden = true;
+        renderImageManager();
+      }
+
+      function editProduct(id) {
+        const product = adminProducts.find((item) => Number(item.id) === Number(id));
+        if (!product) return;
+
+        form.elements.id.value = product.id;
+        form.elements.name.value = product.name || '';
+        form.elements.category.value = product.category || '';
+        form.elements.price.value = product.price || '';
+        form.elements.sale_price.value = product.sale_price || '';
+        form.elements.stock.value = product.stock || 0;
+        form.elements.status.value = product.status || 'active';
+        form.elements.description.value = product.description || '';
+        form.elements.details.value = product.details || '';
+        form.elements.featured.checked = Boolean(Number(product.featured));
+        form.elements.promo.checked = Boolean(Number(product.promo));
+        productImages = Array.isArray(product.images) && product.images.length ? [...product.images] : [product.image].filter(Boolean);
+        document.getElementById('formTitle').textContent = 'Editar produto';
+        document.getElementById('saveProductBtn').textContent = 'Salvar alteracoes';
+        document.getElementById('cancelEditBtn').hidden = false;
+        renderImageManager();
+        document.querySelector('.admin-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      fileInput.addEventListener('change', () => {
+        const files = [...fileInput.files];
+        if (!files.length) return;
+
+        Promise.all(files.map((file) => new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        }))).then((images) => {
+          addImages(images);
+          fileInput.value = '';
+        });
+      });
+
+      document.getElementById('addUrlBtn').addEventListener('click', () => {
+        const input = document.getElementById('imageUrlInput');
+        const value = input.value.trim();
+        if (!value) return;
+        addImages([value]);
+        input.value = '';
+      });
+
+      imageList.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+        if (button.dataset.imageUp) moveImage(Number(button.dataset.imageUp), -1);
+        if (button.dataset.imageDown) moveImage(Number(button.dataset.imageDown), 1);
+        if (button.dataset.imageMain) setMainImage(Number(button.dataset.imageMain));
+        if (button.dataset.imageRemove) removeImage(Number(button.dataset.imageRemove));
+      });
+
+      form.addEventListener('input', updatePreview);
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const message = document.getElementById('productMessage');
+        const button = document.getElementById('saveProductBtn');
+        const data = Object.fromEntries(new FormData(form));
+        const id = form.elements.id.value;
+
+        if (!productImages.length) {
+          message.textContent = 'Adicione pelo menos uma imagem principal.';
+          return;
+        }
+
+        message.textContent = 'Salvando produto...';
+        button.disabled = true;
+
+        try {
+          const response = await fetch(id ? `/api/products/${id}` : '/api/products', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...data,
+              images: productImages,
+              featured: data.featured === 'on',
+              promo: data.promo === 'on'
+            })
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            message.textContent = id ? 'Produto atualizado com sucesso.' : 'Produto cadastrado com sucesso.';
+            resetForm();
+            await loadAdminProducts();
+            return;
+          }
+
+          message.textContent = result.error || 'Erro ao salvar produto.';
+        } catch (error) {
+          message.textContent = 'Falha de conexao ao salvar.';
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      async function loadAdminProducts() {
+        const response = await fetch('/api/products?includeDrafts=1');
+        adminProducts = await response.json();
+        renderAdminStats(adminProducts);
+        renderCategoryOptions(adminProducts);
+        renderAdminProducts();
+      }
+
+      async function deleteProduct(id) {
+        const product = adminProducts.find((item) => Number(item.id) === Number(id));
+        if (!confirm(`Excluir ${product ? product.name : 'este produto'}?`)) return;
+        await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        loadAdminProducts();
+      }
+
+      document.body.addEventListener('click', (event) => {
+        const editButton = event.target.closest('[data-edit-product]');
+        const deleteButton = event.target.closest('[data-delete-product]');
+        if (editButton) editProduct(editButton.dataset.editProduct);
+        if (deleteButton) deleteProduct(deleteButton.dataset.deleteProduct);
+      });
+
+      document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/';
+      });
+
+      adminSearch.addEventListener('input', renderAdminProducts);
+      adminCategoryFilter.addEventListener('change', renderAdminProducts);
+
+      resetForm();
+      loadAdminProducts();
+    </script>
+  </body>
+</html>

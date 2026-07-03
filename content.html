@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conteudo - Portal Donna</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header admin-header">
+      <a class="brand-link admin-brand logo-link" href="/admin" aria-label="Donna Admin">
+        <img
+          class="brand-logo brand-logo-admin"
+          src="/assets/brand/donna-horizontal-brown.png"
+          alt="Donna Semijoias"
+        />
+        <span>Portal</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegacao administrativa">
+        <a href="/admin/produtos">Produtos</a>
+        <a href="/admin/vendas">Vendas</a>
+        <a class="active" href="/admin/conteudo">Conteudo</a>
+        <button class="nav-pill" id="logoutBtn" type="button">Sair</button>
+      </nav>
+    </header>
+
+    <main class="admin-console">
+      <section class="admin-hero-panel">
+        <div>
+          <p class="eyebrow">Conteudo da loja</p>
+          <h1>Banners e categorias</h1>
+          <p>
+            Troque as imagens da vitrine, edite os textos do banner principal e
+            organize as categorias que aparecem na pagina inicial.
+          </p>
+        </div>
+        <div class="admin-kpi-grid">
+          <article>
+            <span>Categorias</span>
+            <strong id="categoryCount">0</strong>
+          </article>
+          <article>
+            <span>Ativas</span>
+            <strong id="activeCategoryCount">0</strong>
+          </article>
+          <article>
+            <span>Imagens editaveis</span>
+            <strong>4</strong>
+          </article>
+        </div>
+      </section>
+
+      <div class="admin-content-layout">
+        <!-- ============ BANNERS / IMAGENS DO SITE ============ -->
+        <section class="admin-panel">
+          <div class="admin-form-heading">
+            <div>
+              <p class="eyebrow">Imagens do site</p>
+              <h1>Banners da vitrine</h1>
+            </div>
+            <button class="btn btn-dark" id="saveContentBtn" type="button">Salvar conteudo</button>
+          </div>
+
+          <div class="banner-grid" id="bannerGrid">
+            <!-- slots inseridos via JS -->
+          </div>
+
+          <section class="hero-text-fields">
+            <p class="eyebrow">Textos do banner principal</p>
+            <label>
+              Chamada (eyebrow)
+              <input type="text" id="hero_eyebrow" />
+            </label>
+            <label>
+              Titulo
+              <textarea id="hero_title" rows="2"></textarea>
+            </label>
+            <label>
+              Descricao
+              <textarea id="hero_text" rows="3"></textarea>
+            </label>
+          </section>
+          <p class="form-message" id="contentMessage" role="status"></p>
+        </section>
+
+        <!-- ============ CATEGORIAS ============ -->
+        <section class="admin-panel">
+          <div class="admin-form-heading">
+            <div>
+              <p class="eyebrow" id="categoryFormEyebrow">Nova categoria</p>
+              <h1 id="categoryFormTitle">Criar categoria</h1>
+            </div>
+            <button class="btn btn-soft" id="cancelCategoryBtn" type="button" hidden>Cancelar</button>
+          </div>
+
+          <form class="product-form" id="categoryForm">
+            <input type="hidden" id="categoryId" />
+            <div class="form-row">
+              <label>
+                Nome
+                <input type="text" id="categoryName" placeholder="Brincos" required />
+              </label>
+              <label>
+                Subtitulo
+                <input type="text" id="categorySubtitle" placeholder="Luz perto do rosto" />
+              </label>
+            </div>
+
+            <section class="image-manager">
+              <div class="image-manager-header">
+                <div>
+                  <p class="eyebrow">Foto da categoria</p>
+                  <h2>Imagem do bloco</h2>
+                </div>
+                <label class="btn btn-soft upload-button">
+                  Enviar arquivo
+                  <input type="file" id="categoryImageFile" accept="image/*" />
+                </label>
+              </div>
+              <div class="image-url-row">
+                <input type="url" id="categoryImageUrl" placeholder="/assets/editorial/... ou URL externa" />
+                <button class="btn btn-light" id="applyCategoryUrl" type="button">Usar URL</button>
+              </div>
+              <div class="banner-preview">
+                <img id="categoryImagePreview" src="/assets/editorial/category-flatlay-premium.jpg" alt="Previa da categoria" />
+              </div>
+            </section>
+
+            <label class="checkbox-line">
+              <input type="checkbox" id="categoryActive" checked />
+              Exibir na vitrine
+            </label>
+            <label class="checkbox-line" id="renameProductsLine" hidden>
+              <input type="checkbox" id="renameProducts" />
+              Renomear tambem os produtos desta categoria
+            </label>
+
+            <button class="btn btn-dark" id="saveCategoryBtn" type="submit">Criar categoria</button>
+            <p class="form-message" id="categoryMessage" role="status"></p>
+          </form>
+        </section>
+
+        <!-- ============ LISTA DE CATEGORIAS ============ -->
+        <section class="admin-wide">
+          <div class="section-header admin-list-header">
+            <div>
+              <p class="eyebrow">Vitrine</p>
+              <h2>Categorias cadastradas</h2>
+            </div>
+            <p class="muted">Use as setas para reordenar. A ordem aqui e a ordem na loja.</p>
+          </div>
+          <div class="category-admin-list" id="categoryList"></div>
+        </section>
+      </div>
+    </main>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <script>
+      const CONTENT_KEYS = ['hero_image', 'lookbook_image', 'story_image', 'gift_image'];
+      const BANNER_SLOTS = [
+        { key: 'hero_image', label: 'Banner principal', hint: 'Imagem de fundo do topo da loja.' },
+        { key: 'lookbook_image', label: 'Lookbook', hint: 'Imagem da secao editorial "Shop the edit".' },
+        { key: 'story_image', label: 'Historia', hint: 'Imagem da secao "Brilho discreto".' },
+        { key: 'gift_image', label: 'Presentes', hint: 'Fundo da faixa de presentes.' }
+      ];
+      const fallbackImage = '/assets/editorial/category-flatlay-premium.jpg';
+
+      let siteContent = {};
+      let categories = [];
+      let categoryImage = '';
+      let editingId = null;
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+        }[char]));
+      }
+
+      function readFileAsDataUrl(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function showToast(title, subtitle = '', icon = '✓') {
+        const stack = document.getElementById('toastStack');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<span class="toast-icon">${icon}</span><div><strong>${escapeHtml(title)}</strong>${subtitle ? `<span>${escapeHtml(subtitle)}</span>` : ''}</div>`;
+        stack.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 260); }, 3200);
+      }
+
+      /* ---------- Banners / conteudo do site ---------- */
+      function renderBannerSlots() {
+        document.getElementById('bannerGrid').innerHTML = BANNER_SLOTS.map((slot) => `
+          <article class="banner-slot" data-slot="${slot.key}">
+            <div class="banner-preview">
+              <img data-preview="${slot.key}" src="${escapeHtml(siteContent[slot.key] || fallbackImage)}" alt="${escapeHtml(slot.label)}" onerror="this.onerror=null;this.src='${fallbackImage}'" />
+            </div>
+            <div class="banner-slot-body">
+              <strong>${escapeHtml(slot.label)}</strong>
+              <span>${escapeHtml(slot.hint)}</span>
+              <div class="banner-slot-actions">
+                <label class="btn btn-soft upload-button">
+                  Enviar
+                  <input type="file" accept="image/*" data-file="${slot.key}" />
+                </label>
+                <button class="btn btn-light" type="button" data-reset="${slot.key}">Restaurar</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      function setBannerImage(key, value) {
+        siteContent[key] = value;
+        const img = document.querySelector(`[data-preview="${key}"]`);
+        if (img) img.src = value || fallbackImage;
+      }
+
+      async function loadContent() {
+        const response = await fetch('/api/site-content');
+        siteContent = await response.json();
+        renderBannerSlots();
+        document.getElementById('hero_eyebrow').value = siteContent.hero_eyebrow || '';
+        document.getElementById('hero_title').value = siteContent.hero_title || '';
+        document.getElementById('hero_text').value = siteContent.hero_text || '';
+      }
+
+      document.getElementById('bannerGrid').addEventListener('change', async (event) => {
+        const input = event.target.closest('[data-file]');
+        if (!input || !input.files.length) return;
+        const dataUrl = await readFileAsDataUrl(input.files[0]);
+        setBannerImage(input.dataset.file, dataUrl);
+        input.value = '';
+      });
+
+      document.getElementById('bannerGrid').addEventListener('click', (event) => {
+        const reset = event.target.closest('[data-reset]');
+        if (!reset) return;
+        setBannerImage(reset.dataset.reset, '');
+        showToast('Imagem restaurada', 'Salve para aplicar o padrao', '↺');
+      });
+
+      document.getElementById('saveContentBtn').addEventListener('click', async () => {
+        const message = document.getElementById('contentMessage');
+        const payload = {
+          hero_eyebrow: document.getElementById('hero_eyebrow').value,
+          hero_title: document.getElementById('hero_title').value,
+          hero_text: document.getElementById('hero_text').value
+        };
+        CONTENT_KEYS.forEach((key) => { if (siteContent[key] !== undefined) payload[key] = siteContent[key]; });
+        message.textContent = 'Salvando...';
+        try {
+          const response = await fetch('/api/site-content', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            siteContent = result.content;
+            renderBannerSlots();
+            message.textContent = 'Conteudo salvo com sucesso.';
+            showToast('Conteudo do site atualizado');
+            return;
+          }
+          message.textContent = result.error || 'Erro ao salvar.';
+        } catch (error) {
+          message.textContent = 'Falha de conexao ao salvar.';
+        }
+      });
+
+      /* ---------- Categorias ---------- */
+      function renderCategoryStats() {
+        document.getElementById('categoryCount').textContent = categories.length;
+        document.getElementById('activeCategoryCount').textContent = categories.filter((c) => Number(c.active)).length;
+      }
+
+      function renderCategoryList() {
+        const list = document.getElementById('categoryList');
+        if (!categories.length) {
+          list.innerHTML = '<div class="admin-empty"><h3>Nenhuma categoria</h3><p>Crie a primeira categoria da vitrine.</p></div>';
+          return;
+        }
+        list.innerHTML = categories.map((category, index) => `
+          <article class="category-admin-item ${Number(category.active) ? '' : 'is-inactive'}">
+            <img src="${escapeHtml(category.image || fallbackImage)}" alt="${escapeHtml(category.name)}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />
+            <div>
+              <div class="admin-product-meta">
+                <span>#${index + 1}</span>
+                ${Number(category.active) ? '' : '<em class="tag-out">Oculta</em>'}
+                <em>${Number(category.product_count || 0)} produto(s)</em>
+              </div>
+              <h3>${escapeHtml(category.name)}</h3>
+              <p>${escapeHtml(category.subtitle || 'Sem subtitulo')}</p>
+            </div>
+            <div class="category-admin-actions">
+              <button class="icon-button" type="button" data-move="${category.id}" data-dir="-1" ${index === 0 ? 'disabled' : ''} aria-label="Subir">↑</button>
+              <button class="icon-button" type="button" data-move="${category.id}" data-dir="1" ${index === categories.length - 1 ? 'disabled' : ''} aria-label="Descer">↓</button>
+              <button class="btn btn-soft" type="button" data-edit-category-id="${category.id}">Editar</button>
+              <button class="btn btn-light" type="button" data-delete-category="${category.id}">Excluir</button>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      async function loadCategories() {
+        const response = await fetch('/api/categories?admin=1');
+        categories = await response.json();
+        renderCategoryStats();
+        renderCategoryList();
+      }
+
+      function setCategoryImage(value) {
+        categoryImage = value || '';
+        document.getElementById('categoryImagePreview').src = categoryImage || fallbackImage;
+      }
+
+      function resetCategoryForm() {
+        editingId = null;
+        document.getElementById('categoryId').value = '';
+        document.getElementById('categoryName').value = '';
+        document.getElementById('categorySubtitle').value = '';
+        document.getElementById('categoryActive').checked = true;
+        document.getElementById('renameProducts').checked = false;
+        document.getElementById('renameProductsLine').hidden = true;
+        setCategoryImage('');
+        document.getElementById('categoryFormTitle').textContent = 'Criar categoria';
+        document.getElementById('categoryFormEyebrow').textContent = 'Nova categoria';
+        document.getElementById('saveCategoryBtn').textContent = 'Criar categoria';
+        document.getElementById('cancelCategoryBtn').hidden = true;
+        document.getElementById('categoryMessage').textContent = '';
+      }
+
+      function editCategory(id) {
+        const category = categories.find((c) => Number(c.id) === Number(id));
+        if (!category) return;
+        editingId = category.id;
+        document.getElementById('categoryId').value = category.id;
+        document.getElementById('categoryName').value = category.name || '';
+        document.getElementById('categorySubtitle').value = category.subtitle || '';
+        document.getElementById('categoryActive').checked = Boolean(Number(category.active));
+        document.getElementById('renameProducts').checked = false;
+        document.getElementById('renameProductsLine').hidden = false;
+        setCategoryImage(category.image || '');
+        document.getElementById('categoryFormTitle').textContent = 'Editar categoria';
+        document.getElementById('categoryFormEyebrow').textContent = 'Editar';
+        document.getElementById('saveCategoryBtn').textContent = 'Salvar alteracoes';
+        document.getElementById('cancelCategoryBtn').hidden = false;
+        document.querySelector('.admin-content-layout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      document.getElementById('categoryImageFile').addEventListener('change', async (event) => {
+        if (!event.target.files.length) return;
+        setCategoryImage(await readFileAsDataUrl(event.target.files[0]));
+        event.target.value = '';
+      });
+
+      document.getElementById('applyCategoryUrl').addEventListener('click', () => {
+        const input = document.getElementById('categoryImageUrl');
+        if (input.value.trim()) {
+          setCategoryImage(input.value.trim());
+          input.value = '';
+        }
+      });
+
+      document.getElementById('categoryForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const message = document.getElementById('categoryMessage');
+        const payload = {
+          name: document.getElementById('categoryName').value,
+          subtitle: document.getElementById('categorySubtitle').value,
+          image: categoryImage,
+          active: document.getElementById('categoryActive').checked,
+          renameProducts: document.getElementById('renameProducts').checked
+        };
+        message.textContent = 'Salvando...';
+        try {
+          const response = await fetch(editingId ? `/api/categories/${editingId}` : '/api/categories', {
+            method: editingId ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const result = await response.json();
+          if (result.success) {
+            showToast(editingId ? 'Categoria atualizada' : 'Categoria criada', payload.name);
+            resetCategoryForm();
+            await loadCategories();
+            return;
+          }
+          message.textContent = result.error || 'Erro ao salvar categoria.';
+        } catch (error) {
+          message.textContent = 'Falha de conexao ao salvar.';
+        }
+      });
+
+      document.getElementById('cancelCategoryBtn').addEventListener('click', resetCategoryForm);
+
+      async function moveCategory(id, dir) {
+        const index = categories.findIndex((c) => Number(c.id) === Number(id));
+        const target = index + dir;
+        if (index < 0 || target < 0 || target >= categories.length) return;
+        const a = categories[index];
+        const b = categories[target];
+        // troca as posicoes das duas categorias
+        const responses = await Promise.all([
+          fetch(`/api/categories/${a.id}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: a.name, subtitle: a.subtitle, image: a.image, active: a.active, position: b.position })
+          }),
+          fetch(`/api/categories/${b.id}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: b.name, subtitle: b.subtitle, image: b.image, active: b.active, position: a.position })
+          })
+        ]);
+        if (responses.some((r) => !r.ok)) {
+          showToast('Falha ao reordenar', '', '!');
+        }
+        await loadCategories();
+      }
+
+      async function deleteCategory(id) {
+        const category = categories.find((c) => Number(c.id) === Number(id));
+        if (!category) return;
+        const count = Number(category.product_count || 0);
+        const warning = count > 0
+          ? `A categoria "${category.name}" tem ${count} produto(s). Eles continuarao existindo, mas sem este bloco na vitrine. Excluir?`
+          : `Excluir a categoria "${category.name}"?`;
+        if (!confirm(warning)) return;
+        const response = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.success) {
+          showToast('Falha ao excluir', result.error || '', '!');
+          return;
+        }
+        showToast('Categoria excluida', category.name, '✕');
+        await loadCategories();
+      }
+
+      document.getElementById('categoryList').addEventListener('click', (event) => {
+        const move = event.target.closest('[data-move]');
+        const edit = event.target.closest('[data-edit-category-id]');
+        const del = event.target.closest('[data-delete-category]');
+        if (move) moveCategory(move.dataset.move, Number(move.dataset.dir));
+        if (edit) editCategory(edit.dataset.editCategoryId);
+        if (del) deleteCategory(del.dataset.deleteCategory);
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/';
+      });
+
+      resetCategoryForm();
+      loadContent();
+      loadCategories();
+    </script>
+  </body>
+</html>

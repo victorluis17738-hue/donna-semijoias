@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Portal Donna</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store2" />
+  </head>
+  <body class="auth-page admin-auth-page">
+    <main class="auth-shell">
+      <a class="brand-link auth-brand logo-link" href="/" aria-label="Donna Semijoias">
+        <img
+          class="brand-logo brand-logo-horizontal"
+          src="/assets/brand/donna-horizontal-brown.png"
+          alt="Donna Semijoias"
+        />
+      </a>
+
+      <section class="auth-card">
+        <p class="eyebrow">Cadastro</p>
+        <h1>Criar usuário</h1>
+        <p class="muted">
+          Informe seus dados para que a loja consiga identificar seu cadastro e
+          entrar em contato quando necessário.
+        </p>
+
+        <form id="registerForm">
+          <label>
+            Nome completo
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label>
+            CPF
+            <input
+              type="text"
+              name="cpf"
+              inputmode="numeric"
+              maxlength="14"
+              placeholder="000.000.000-00"
+              required
+            />
+          </label>
+          <label>
+            Número de telefone
+            <input
+              type="tel"
+              name="phone"
+              inputmode="tel"
+              maxlength="15"
+              placeholder="(00) 00000-0000"
+              required
+            />
+          </label>
+          <button class="btn btn-dark" type="submit">Cadastrar usuário</button>
+          <a class="text-link inline-link" href="/login">Voltar para login</a>
+          <p class="form-message" id="registerMessage"></p>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      function onlyDigits(value) {
+        return value.replace(/\D/g, '');
+      }
+
+      function formatCpf(value) {
+        const digits = onlyDigits(value).slice(0, 11);
+        return digits
+          .replace(/(\d{3})(\d)/, '$1.$2')
+          .replace(/(\d{3})(\d)/, '$1.$2')
+          .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      }
+
+      function formatPhone(value) {
+        const digits = onlyDigits(value).slice(0, 11);
+        if (digits.length <= 10) {
+          return digits
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+        }
+
+        return digits
+          .replace(/(\d{2})(\d)/, '($1) $2')
+          .replace(/(\d{5})(\d)/, '$1-$2');
+      }
+
+      document.querySelector('[name="cpf"]').addEventListener('input', (event) => {
+        event.target.value = formatCpf(event.target.value);
+      });
+
+      document.querySelector('[name="phone"]').addEventListener('input', (event) => {
+        event.target.value = formatPhone(event.target.value);
+      });
+
+      document.getElementById('registerForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const message = document.getElementById('registerMessage');
+        const data = Object.fromEntries(new FormData(form));
+
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          form.reset();
+          message.textContent = 'Cadastro realizado com sucesso.';
+          return;
+        }
+
+        message.textContent = result.error || 'Não foi possível cadastrar.';
+      });
+    </script>
+  </body>
+</html>

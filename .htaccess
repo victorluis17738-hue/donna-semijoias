@@ -1,0 +1,23 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^admin/?$ login.html [L]
+  RewriteRule ^admin/produtos/?$ login.html [L]
+  RewriteRule ^admin/vendas/?$ login.html [L]
+  RewriteRule ^login/?$ login.html [L]
+  RewriteRule ^register/?$ register.html [L]
+  RewriteRule ^dashboard/?$ login.html [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=3600" "expr=%{REQUEST_URI} =~ m#\.(css|js|png|jpg|jpeg|webp|gif|svg)$#"
+</IfModule>
