@@ -32,12 +32,19 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 8
   }
 }));
+// Sempre servir a versao mais recente: o navegador pode guardar o arquivo,
+// mas SEMPRE revalida com o servidor (via ETag). Assim toda atualizacao
+// publicada aparece na hora, sem ficar presa no cache do navegador.
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  next();
+});
 app.use(express.static(__dirname, {
   etag: true,
-  maxAge: '1h',
+  maxAge: 0,
   setHeaders(res, filePath) {
-    if (filePath.match(/\.(png|jpg|jpeg|webp|gif|svg|css|js)$/i)) {
-      res.setHeader('Cache-Control', 'public, max-age=3600');
+    if (filePath.match(/\.(png|jpg|jpeg|webp|gif|svg|css|js|html)$/i)) {
+      res.setHeader('Cache-Control', 'no-cache');
     }
   }
 }));
