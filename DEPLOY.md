@@ -1,144 +1,82 @@
-# Publicação e Banco de Dados — Donna Semijoias
+# Publicar a Donna Semijoias — Render (grátis) + Supabase
 
-Este guia responde duas perguntas: **o que muda no InfinityFree** e **o que muda no banco de dados**.
+Este projeto agora usa **Postgres**. Isso permite hospedar **de graça e com os dados salvos para sempre**:
 
----
+- **Render (plano Free)** roda o site (`server.js`).
+- **Supabase (plano Free)** guarda o banco de dados (produtos, categorias, banners, vendas).
 
-## 1. Resumo direto
-
-Este site tem **duas partes**:
-
-| Parte | Arquivos | Precisa de quê |
-|-------|----------|----------------|
-| **Frontend (vitrine)** | `index.html`, `styles.css`, `assets/` | Só arquivos estáticos |
-| **Backend (loja de verdade)** | `server.js` + `database.db` | **Node.js rodando 24h** |
-
-O **backend** é o que faz funcionar: login do admin, cadastro de produtos, categorias, banners, vendas, carrinho com WhatsApp e todas as rotas `/api/*`.
-
-> ⚠️ **O InfinityFree NÃO roda Node.js.** Ele só serve HTML/CSS/imagens e PHP. Ou seja, sozinho, o InfinityFree **não** consegue rodar `server.js`. Sem o backend, a vitrine abre mas fica sem produtos, sem categorias, sem banners editáveis e sem admin.
+> Localmente você não precisa de nada: sem `DATABASE_URL`, o app usa **PGlite** (um Postgres embutido, na pasta `./pgdata`). É só `npm install` e `npm start`.
 
 ---
 
-## 2. O que fazer no InfinityFree
+## Parte 1 — Criar o banco no Supabase
 
-Você tem 3 caminhos. Escolha **um**.
+1. Entre em [supabase.com](https://supabase.com) → **Sign in** (pode entrar com o GitHub) → **New project**.
+2. Preencha:
+   - **Name:** donna-semijoias
+   - **Database Password:** crie uma senha forte e **guarde** (vai na connection string).
+   - **Region:** escolha **South America (São Paulo)** se aparecer, senão a mais próxima.
+3. Clique em **Create new project** e espere ~1–2 min o banco subir.
+4. Pegue a **connection string**:
+   - Botão **Connect** (no topo) **ou** ⚙️ **Project Settings → Database**.
+   - Procure **Connection string → URI**, na aba **Connection pooling** (Session mode).
+   - Vai ser algo assim:
+     ```
+     postgresql://postgres.abcdefgh:[YOUR-PASSWORD]@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
+     ```
+   - Troque `[YOUR-PASSWORD]` pela senha que você criou no passo 2.
 
-### ✅ Opção A (mais simples e recomendada): hospedar tudo no Render
-Hospede o projeto inteiro (frontend **+** backend juntos, exatamente como está hoje). O Render serve a vitrine e as APIs no mesmo endereço — o InfinityFree **não é usado**.
+> **Importante:** use a string do **pooler** (`...pooler.supabase.com`), não a “direct connection”. A direta é só IPv6 e o Render não conecta nela.
 
-O código já está preparado para o Render:
-- `app.set('trust proxy', 1)` — faz o **login do admin funcionar** atrás do HTTPS do Render.
-- `DATABASE_PATH` — permite apontar o banco para um **disco persistente**.
-- usa `process.env.PORT` — o Render define a porta automaticamente.
+Você **não precisa criar tabela nenhuma** no Supabase — o `server.js` cria tudo sozinho no primeiro start.
 
-**Passo a passo:**
+---
 
-1. **Suba o código para o GitHub.**
-   - Crie um repositório e faça push desta pasta. Confirme que o `.gitignore` ignora `node_modules` e `database.db` (não versione o banco).
+## Parte 2 — Publicar no Render
 
-2. **Crie o serviço no Render.**
-   - Entre em [dashboard.render.com](https://dashboard.render.com) → **New +** → **Web Service** → conecte o GitHub e escolha o repositório.
-
-3. **Configurações do serviço:**
+1. Suba o código para o **GitHub** (já feito): `git push`.
+2. Em [dashboard.render.com](https://dashboard.render.com) → **New +** → **Web Service** → escolha o repositório **donna-semijoias**.
+3. Configuração:
    - **Language:** Node
+   - **Branch:** main
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
-   - **Instance Type:** para uma loja de verdade escolha um plano **pago (Starter, ~US$7/mês)**. O plano **Free não guarda o banco** (ver passo 5) e “dorme” após 15 min de inatividade.
-
-4. **Variáveis de ambiente** (aba **Environment** → Add Environment Variable):
+   - **Instance Type:** **Free** já serve (os dados ficam no Supabase, não somem).
+4. **Environment** → adicione as variáveis:
    ```
-   NODE_ENV=production
-   SESSION_SECRET=<chave-longa-aleatoria>
-   ADMIN_EMAIL=<seu-email>
-   ADMIN_PASSWORD=<senha-forte>
-   STORE_WHATSAPP=55DDNNNNNNNNN
-   DATABASE_PATH=/data/database.db
+   NODE_ENV        production
+   SESSION_SECRET  uma-chave-longa-e-aleatoria
+   ADMIN_EMAIL     seu-email
+   ADMIN_PASSWORD  uma-senha-forte
+   STORE_WHATSAPP  55 + DDD + número (só dígitos)
+   DATABASE_URL    (a connection string do Supabase, com a senha)
    ```
+5. **Create Web Service.** O Render instala e sobe; o `server.js` cria as tabelas e o catálogo inicial **no Supabase** automaticamente.
+6. Acesse `https://SEU-APP.onrender.com` e teste: vitrine, `/login`, cadastrar produto, criar categoria, trocar banner, registrar venda, finalizar carrinho no WhatsApp.
 
-5. **Disco persistente** (aba **Disks** → Add Disk) — **essencial** para não perder produtos/vendas a cada deploy:
-   - **Name:** `data`
-   - **Mount Path:** `/data`
-   - **Size:** 1 GB já basta.
-   - Isso combina com `DATABASE_PATH=/data/database.db` do passo 4. (Disco persistente exige plano pago.)
-
-6. **Create Web Service.** O Render roda `npm install` (compila `bcrypt`/`sqlite3`) e sobe o app. Na primeira vez o `server.js` cria as tabelas e o catálogo inicial sozinho.
-
-7. **Teste** em `https://SEU-APP.onrender.com`:
-   - vitrine com produtos, categorias e banners;
-   - `/login` → entrar no painel → cadastrar produto, criar categoria, trocar banner, registrar venda;
-   - finalizar o carrinho pelo WhatsApp.
-
-**Observações:**
-- **Sessões em memória:** o admin é deslogado quando o serviço reinicia (deploy/restart). Para uma loja pequena tudo bem; se incomodar, dá para persistir a sessão (ex.: `connect-sqlite3`).
-- **Plano Free:** só serve para testar — sem disco persistente o `database.db` é recriado (com o catálogo de exemplo) a cada deploy/hibernação, então tudo que você cadastrar some. Para manter os dados, use o plano pago + disco (passo 5) **ou** migre para Postgres/Supabase (Opção C).
-- **Railway/Fly.io** seguem a mesma ideia: Node + variáveis de ambiente + volume persistente apontado por `DATABASE_PATH`.
-
-### Opção B: frontend no InfinityFree + backend no Render
-Se você faz questão de manter o domínio/host do InfinityFree para a vitrine:
-1. Publique no InfinityFree apenas: `index.html`, `styles.css`, `assets/` e o `.htaccess`.
-2. Hospede o `server.js` no Render (como na Opção A).
-3. No `index.html`, troque as chamadas relativas (`/api/...`, `/contato`) por **URLs absolutas** do backend, por exemplo `https://donna.onrender.com/api/products`. As linhas a alterar usam `fetch('/api/...')`.
-4. No `server.js`, libere **CORS** para o domínio do InfinityFree (hoje não há CORS porque tudo é servido pela mesma origem). É preciso `npm install cors` e habilitar só para o seu domínio.
-5. As páginas de admin (`/admin/...`, `login.html`, etc.) ficam **no backend** (Render), não no InfinityFree, porque dependem de sessão.
-
-### Opção C: InfinityFree + Supabase (sem servidor Node)
-Migração maior: troca o `server.js`/SQLite por **Supabase** (banco Postgres + Auth + Storage). A vitrine estática fica no InfinityFree e fala direto com o Supabase. É a melhor opção “100% InfinityFree”, mas exige reescrever a camada de dados. Só vale a pena se você não quiser manter um backend Node.
-
-### Sobre o `.htaccess`
-O `.htaccess` incluído só ajuda o InfinityFree a **não quebrar** as URLs diretas (`/login`, `/admin`) servindo os HTML corretos. Ele **não** cria o backend — as rotas `/api/*` continuam sem funcionar no InfinityFree puro.
+**Não precisa de disco** (aquele passo do `/data` sumiu — o banco agora é o Supabase).
 
 ---
 
-## 3. O que muda no banco de dados
+## Observações
 
-### Como está hoje
-- Banco: **SQLite**, no arquivo **`database.db`** (na raiz do projeto).
-- **Você não precisa criar nada manualmente.** Ao iniciar, o `server.js` cria/atualiza sozinho todas as tabelas e insere os dados iniciais:
-  - `products` (produtos, com preço, promoção, estoque, imagens)
-  - `categories` (categorias da vitrine — **novo**)
-  - `store_meta` (guarda os banners/textos do site em `site_content` — **novo**)
-  - `admins` (login do painel)
-  - `sales` (vendas)
-  - `customers` (cadastros)
-
-### O que você precisa garantir na publicação
-1. **Persistência do arquivo `database.db`.**
-   Em serviços como Render/Railway, o disco é apagado a cada novo deploy. Sem um **disco persistente**, você perde produtos, categorias, banners e vendas a cada atualização. → No Render, adicione um **Persistent Disk** e aponte o app para gravar o `database.db` nele.
-
-2. **Backup.** Baixe o `database.db` de tempos em tempos — é onde ficam todos os seus produtos, categorias, banners e histórico de vendas.
-
-3. **Imagens grandes.** Fotos enviadas pelo painel (produtos, categorias e banners) são gravadas **dentro do banco** como base64. Muitas fotos grandes incham o `database.db` e deixam a API mais lenta. Para catálogos grandes, o ideal é subir as imagens para **Storage** (ex.: Supabase Storage, Cloudinary, S3) e guardar só a URL. Para uma loja pequena, o modo atual funciona bem.
-
-### Se um dia migrar de SQLite para outro banco
-- **InfinityFree oferece MySQL**, mas ele **não aceita conexão remota** de um backend hospedado fora (Render/Railway). Então o MySQL do InfinityFree **não serve** para o backend Node deste projeto.
-- Se quiser um banco gerenciado, use **Postgres (Supabase/Neon/Render Postgres)**. Isso exige trocar o driver `sqlite3` por `pg` no `server.js` e recriar as tabelas (a estrutura é a mesma listada acima).
+- **Free “dorme”:** o serviço Free do Render hiberna após ~15 min sem acesso; a primeira visita depois disso demora alguns segundos para “acordar”. **Os dados não somem** (estão no Supabase). Se quiser sem essa espera, um plano pago do Render resolve — mas não é obrigatório.
+- **Admin deslogado ao reiniciar:** a sessão fica em memória, então quando o serviço reinicia/acorda você loga de novo. Normal.
+- **Backups:** o Supabase (Free) mantém o banco; para exportar, use **Database → Backups** ou o botão de exportar. Suas vendas também saem em **CSV** pelo painel de Vendas.
+- **Imagens:** fotos enviadas pelo painel são gravadas no banco (base64). Para catálogos grandes, o ideal é usar **Supabase Storage** e guardar só a URL.
 
 ---
 
-## 4. Variáveis de ambiente (obrigatório em produção)
+## Rodar localmente
 
-Defina no painel do serviço de hospedagem (Render/Railway) — **não** deixe os valores padrão:
-
+```bash
+npm install
+npm start          # http://localhost:3000  (usa PGlite, cria ./pgdata)
 ```
-NODE_ENV=production
-SESSION_SECRET=<uma-chave-longa-e-aleatoria>
-ADMIN_EMAIL=<seu-email-de-admin>
-ADMIN_PASSWORD=<uma-senha-forte>
-STORE_WHATSAPP=55DDNNNNNNNNN   (número que recebe os pedidos, só dígitos)
-PORT=3000
-```
-
-- `SESSION_SECRET` e `ADMIN_PASSWORD` **precisam** ser trocados — os valores padrão são públicos (estão no README).
-- `NODE_ENV=production` ativa o cookie de sessão seguro (só HTTPS).
-- `STORE_WHATSAPP` é o número que recebe a mensagem do carrinho.
+Para testar com o Supabase localmente, crie um arquivo `.env` (veja `.env.example`) com o `DATABASE_URL` preenchido.
 
 ---
 
-## 5. Checklist rápido
+## E o InfinityFree?
 
-- [ ] Escolhi onde roda o backend (Render/Railway) — InfinityFree **não** roda Node.
-- [ ] Configurei as variáveis de ambiente (senha e secret trocados).
-- [ ] Configurei **disco persistente** para o `database.db`.
-- [ ] Fiz um backup do `database.db`.
-- [ ] (Se usei a Opção B) Troquei os `fetch('/api/...')` por URL absoluta e habilitei CORS.
-- [ ] Testei: login do admin, cadastro de produto, criar categoria, trocar banner, registrar venda, finalizar carrinho pelo WhatsApp.
+O InfinityFree **não roda Node.js**, então não serve para rodar o `server.js`. Com o Render + Supabase (ambos grátis) você não precisa dele. Se quiser usar o InfinityFree só para a vitrine estática, dá — mas o admin/API/carrinho continuam precisando do backend no Render.

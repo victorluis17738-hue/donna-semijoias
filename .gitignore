@@ -9,3 +9,5 @@ database.db.*
 
 # Backups de assets gerados localmente
 assets/brand/_backup/
+# Dados locais do PGlite (Postgres em processo)
+pgdata/

@@ -1,6 +1,6 @@
 # Donna Semijoias
 
-E-commerce de semijoias em HTML/CSS/JavaScript com backend Node.js, Express, SQLite, login administrativo protegido e CRUD de produtos.
+E-commerce de semijoias em HTML/CSS/JavaScript com backend Node.js, Express e **Postgres**, login administrativo protegido, CRUD de produtos, categorias, banners e vendas.
 
 ## Como executar
 
@@ -9,15 +9,21 @@ npm install
 npm start
 ```
 
-O servidor usa `http://localhost:3000` por padrao. Variaveis recomendadas:
+Roda em `http://localhost:3000`. **Não precisa instalar banco:** sem `DATABASE_URL`, o app usa **PGlite** (um Postgres embutido, gravado em `./pgdata`).
+
+Para produção (ou testar com o Supabase), defina `DATABASE_URL` com a connection string do Postgres. Variaveis recomendadas:
 
 ```bash
+$env:NODE_ENV="production"
 $env:SESSION_SECRET="uma-chave-grande"
 $env:ADMIN_EMAIL="admin@sualoja.com"
 $env:ADMIN_PASSWORD="uma-senha-forte"
 $env:STORE_WHATSAPP="5599999999999"
+$env:DATABASE_URL="postgresql://...supabase.com:5432/postgres"
 npm start
 ```
+
+Publicação grátis (Render + Supabase): veja **[DEPLOY.md](DEPLOY.md)**.
 
 ## Acesso administrativo
 
@@ -32,7 +38,7 @@ O link de admin nao aparece na loja publica. Quem acessa `/admin` sem sessao e r
 ## Funcionalidades
 
 ### Loja publica
-- Vitrine carregada do SQLite com busca, filtro por categoria e ordenacao (destaques, preco, maiores descontos, nome).
+- Vitrine carregada do banco (Postgres) com busca, filtro por categoria e ordenacao (destaques, preco, maiores descontos, nome).
 - Precos promocionais com preco original riscado, selo de desconto (%) e economia calculada.
 - Controle de estoque na vitrine: selo "Esgotado", aviso de "Ultimas unidades" e botao de compra desabilitado quando sem estoque.
 - Lista de favoritos (coracao no produto) persistida no navegador, com contador e filtro "somente favoritos".
@@ -49,27 +55,18 @@ O link de admin nao aparece na loja publica. Quem acessa `/admin` sem sessao e r
 - Painel de vendas: registrar nova venda (com baixa automatica de estoque), alterar status, excluir, exportar CSV e metricas que desconsideram pedidos cancelados.
 - Fallback visual para imagens quebradas.
 
-## InfinityFree
+## Banco de dados
 
-O InfinityFree hospeda PHP/arquivos estaticos, mas nao executa backend Node.js persistente. Isso significa:
+- **Local:** PGlite (Postgres embutido), gravado em `./pgdata`. Zero configuracao.
+- **Producao:** Postgres gerenciado (recomendado: **Supabase**, plano grátis), via `DATABASE_URL`.
+- O `server.js` cria as tabelas e o catalogo inicial sozinho no primeiro start — nao precisa rodar migracao manual.
 
-- `index.html`, CSS e imagens podem ser publicados como arquivos estaticos.
-- O `.htaccess` incluido ajuda rotas diretas como `/login` e `/admin` a nao quebrarem.
-- O CRUD do admin, login real, SQLite e APIs `/api/*` nao funcionam no InfinityFree puro, porque dependem do `server.js`.
+## Publicacao
 
-Para publicar com admin funcional, use uma destas arquiteturas:
+Guia completo (grátis, com dados persistentes) em **[DEPLOY.md](DEPLOY.md)**:
 
-- Hospedar este backend Node em Render, Railway, Fly.io, VPS ou similar e apontar o frontend para ele.
-- Migrar dados, imagens e autenticacao para Supabase. Para este tipo de loja, Supabase e a melhor opcao se a prioridade for admin online, imagens gerenciaveis e deploy estatico no InfinityFree.
+- **Render (Free)** roda o `server.js`.
+- **Supabase (Free)** guarda o banco.
+- Basta definir `DATABASE_URL` (Supabase) e as variaveis de ambiente no Render.
 
-## Supabase recomendado
-
-Para producao com InfinityFree, crie no Supabase:
-
-- Tabelas `products` e `categories`.
-- Bucket publico para leitura de imagens.
-- Auth para administradores.
-- RLS permitindo leitura publica de produtos publicados.
-- RLS permitindo criar/editar/excluir apenas para usuarios autenticados autorizados.
-
-Sem as credenciais do projeto Supabase nao ha como configurar uma integracao real neste workspace, mas a estrutura atual ja separa as operacoes de produto de forma clara para essa migracao.
+> O InfinityFree sozinho **nao** serve: ele nao executa Node.js, entao o admin/API/carrinho nao funcionam nele. Use Render + Supabase.
