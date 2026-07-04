@@ -135,6 +135,10 @@ async function initDatabase() {
   await seedCategories();
   await seedSales();
   await seedAdmin();
+  // Atualiza produtos ja gravados: garantia de "6 meses" -> "1 ano" (roda uma vez).
+  await runOnce('warranty-6m-to-1y-v1', async () => {
+    await q("UPDATE products SET details = REPLACE(details, '6 meses', '1 ano') WHERE details LIKE '%6 meses%'");
+  });
 }
 
 // Executa uma acao uma unica vez, controlada por uma chave em store_meta.
@@ -151,7 +155,7 @@ async function runOnce(key, action) {
 async function seedProducts() {
   const starter = [
     ['Brinco Aura Dourada', 'Brincos', 129.9, 'Banho dourado com acabamento polido e presenca delicada.', 'Hipoalergenico, banho 18k, tarraxa confortavel.', '/assets/products/produto1.jpg', 1],
-    ['Colar Linha Fina', 'Colares', 189.9, 'Corrente minimalista para composicoes elegantes do dia a noite.', '45 cm com extensor, banho premium e garantia de 6 meses.', '/assets/products/produto2.jpg', 1],
+    ['Colar Linha Fina', 'Colares', 189.9, 'Corrente minimalista para composicoes elegantes do dia a noite.', '45 cm com extensor, banho premium e garantia de 1 ano.', '/assets/products/produto2.jpg', 1],
     ['Anel Classic Glow', 'Anéis', 99.9, 'Peca clean com brilho sutil para usar sozinha ou em mix.', 'Numeracao ajustavel, zirconias cravejadas e polimento espelhado.', '/assets/products/produto3.jpg', 0],
     ['Pulseira Essenza', 'Pulseiras', 149.9, 'Pulseira leve com visual sofisticado para producao contemporanea.', 'Fecho lagosta, banho dourado e detalhe texturizado.', '/assets/products/produto4.jpg', 1]
   ];
@@ -163,7 +167,7 @@ function seedCatalogComplements() {
     ['Piercing Celeste', 'Piercings', 79.9, 'Piercing delicado com brilho pontual para composicoes modernas.', 'Banho premium, encaixe confortavel e acabamento polido.', '/assets/products/produto5.jpg', 0],
     ['Tornozeleira Riviera', 'Tornozeleiras', 119.9, 'Tornozeleira fina com movimento suave e brilho elegante.', 'Corrente ajustavel, banho dourado e extensor delicado.', '/assets/products/produto6.jpg', 0],
     ['Conjunto Aurora', 'Conjuntos', 249.9, 'Colar e brincos coordenados para presentear com seguranca.', 'Kit presenteavel, banho 18k e embalagem Donna.', '/assets/products/produto7.jpg', 1],
-    ['Brinco Lumiere', 'Lançamentos', 159.9, 'Lancamento com desenho luminoso e presenca sofisticada.', 'Hipoalergenico, tarraxa confortavel e garantia de 6 meses.', '/assets/products/produto8.jpg', 1],
+    ['Brinco Lumiere', 'Lançamentos', 159.9, 'Lancamento com desenho luminoso e presenca sofisticada.', 'Hipoalergenico, tarraxa confortavel e garantia de 1 ano.', '/assets/products/produto8.jpg', 1],
     ['Colar Essencial Donna', 'Mais vendidos', 199.9, 'Mais vendido da colecao, perfeito para camadas minimalistas.', '45 cm com extensor, banho premium e polimento delicado.', '/assets/products/produto9.jpg', 1],
     ['Kit Presente Glow', 'Presentes', 299.9, 'Selecao pronta para surpreender em datas especiais.', 'Acompanha embalagem presenteavel e orientacoes de cuidado.', '/assets/products/produto10.jpg', 1],
     ['Anel Imperial', 'Coleção premium', 219.9, 'Anel de presenca com acabamento elegante para ocasioes especiais.', 'Zirconias cravejadas, banho nobre e acabamento espelhado.', '/assets/products/produto3.jpg', 1],
