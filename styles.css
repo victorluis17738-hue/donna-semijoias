@@ -903,8 +903,8 @@ h3 {
   align-items: center;
   padding: clamp(28px, 4.5vw, 54px) clamp(18px, 4vw, 56px);
   background:
-    radial-gradient(135% 130% at 82% 20%, rgba(201, 153, 92, 0.22), transparent 55%),
-    linear-gradient(120deg, #1b110c 0%, #3a2418 46%, #5a3a24 100%);
+    linear-gradient(90deg, rgba(20, 13, 9, 0.6), rgba(20, 13, 9, 0.05) 60%),
+    url("/assets/editorial/banner-presentear.jpg") center / cover;
   color: var(--white);
 }
 
