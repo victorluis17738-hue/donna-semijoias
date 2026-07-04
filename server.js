@@ -656,6 +656,26 @@ app.get('/api/import/logs/:id/errors.csv', requireAdmin, async (req, res) => {
   }
 });
 
+// Quantos produtos vieram de importacao (tem SKU). Os originais da loja nao tem SKU.
+app.get('/api/import/imported-count', requireAdmin, async (req, res) => {
+  try {
+    const total = Number((await q('SELECT COUNT(*)::int AS total FROM products WHERE sku IS NOT NULL')).rows[0].total);
+    res.json({ count: total });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao contar produtos importados.' });
+  }
+});
+
+// Apaga TODOS os produtos importados (com SKU). Preserva os produtos originais (sem SKU).
+app.delete('/api/import/products', requireAdmin, async (req, res) => {
+  try {
+    const result = await q('DELETE FROM products WHERE sku IS NOT NULL');
+    res.json({ success: true, deleted: result.rowCount || 0 });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao apagar os produtos importados.' });
+  }
+});
+
 // ============================================================
 // Categorias
 // ============================================================

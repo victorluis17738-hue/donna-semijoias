@@ -66,6 +66,9 @@
       table.logs-table th { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b6257; }
       .logs-table .err-link { color: #b23b3b; font-weight: 600; }
       .import-cta { text-decoration: none; }
+      .btn-danger { background: #fff; color: #b23b3b; border: 1px solid #b23b3b; }
+      .btn-danger:hover { background: #b23b3b; color: #fff; }
+      #cleanupPanel { border: 1px solid rgba(178, 59, 59, 0.25); }
     </style>
   </head>
   <body class="admin-page">
@@ -215,6 +218,25 @@
           </table>
         </div>
         <p class="muted" id="logsEmpty" hidden>Nenhuma importacao ainda.</p>
+      </section>
+
+      <!-- Limpeza: apagar produtos importados -->
+      <section class="admin-panel import-panel" id="cleanupPanel">
+        <div class="admin-form-heading">
+          <div>
+            <p class="eyebrow">Limpeza</p>
+            <h2>Apagar produtos importados</h2>
+          </div>
+        </div>
+        <p class="muted">
+          Remove <b>todos</b> os produtos que entraram por importacao (os que tem
+          codigo/SKU). Os produtos <b>originais</b> da loja (sem SKU) <b>nao sao
+          afetados</b>. Util para recomecar uma importacao do zero. Nao da pra desfazer.
+        </p>
+        <div class="import-actions">
+          <button class="btn btn-danger" id="deleteImportedBtn" type="button">Apagar produtos importados</button>
+        </div>
+        <p class="form-message" id="deleteMsg" role="status"></p>
       </section>
     </main>
 
@@ -453,6 +475,39 @@
         }
       }
       $('reloadLogsBtn').addEventListener('click', loadLogs);
+
+      // ---------- Apagar produtos importados ----------
+      $('deleteImportedBtn').addEventListener('click', async () => {
+        $('deleteMsg').textContent = 'Verificando...';
+        let count = 0;
+        try {
+          const r = await fetch('/api/import/imported-count');
+          const d = await r.json().catch(() => ({}));
+          count = Number(d.count || 0);
+        } catch (e) { /* ignore */ }
+
+        if (!count) { $('deleteMsg').textContent = 'Nenhum produto importado para apagar.'; return; }
+        if (!confirm('Apagar ' + count + ' produto(s) importado(s)?\n\nOs produtos ORIGINAIS da loja (sem codigo/SKU) NAO sao afetados.\nIsso NAO pode ser desfeito.')) {
+          $('deleteMsg').textContent = '';
+          return;
+        }
+
+        $('deleteImportedBtn').disabled = true;
+        $('deleteMsg').textContent = 'Apagando ' + count + ' produto(s)...';
+        try {
+          const res = await fetch('/api/import/products', { method: 'DELETE' });
+          const result = await res.json().catch(() => ({}));
+          if (res.ok && result.success) {
+            $('deleteMsg').textContent = result.deleted + ' produto(s) importado(s) apagado(s). A loja ja esta atualizada.';
+          } else {
+            $('deleteMsg').textContent = result.error || 'Erro ao apagar.';
+          }
+        } catch (e) {
+          $('deleteMsg').textContent = 'Falha de conexao ao apagar.';
+        } finally {
+          $('deleteImportedBtn').disabled = false;
+        }
+      });
 
       $('logoutBtn').addEventListener('click', async () => {
         await fetch('/logout', { method: 'POST' });
