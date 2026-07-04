@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Importar catalogo - Portal Donna</title>
+    <link rel="icon" type="image/png" href="/assets/brand/donna-monogram-brown.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260703-store9" />
+    <style>
+      .import-panel { display: grid; gap: 20px; }
+      .import-dropzone {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 8px; text-align: center; cursor: pointer;
+        min-height: 200px; padding: 32px; border-radius: 18px;
+        border: 2px dashed rgba(138, 106, 61, 0.45);
+        background: rgba(138, 106, 61, 0.05);
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+      .import-dropzone:hover { border-color: rgba(138, 106, 61, 0.8); }
+      .import-dropzone.is-drag { border-color: #8a6a3d; background: rgba(138, 106, 61, 0.12); transform: scale(1.005); }
+      .import-dropzone strong { font-size: 1.15rem; }
+      .import-dropzone span { color: #6b6257; font-size: 0.95rem; }
+      .import-dropzone .dz-icon { font-size: 2.4rem; line-height: 1; }
+
+      .map-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+      .map-badge { display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 12px; border-radius: 999px; background: rgba(138, 106, 61, 0.1); font-size: 0.85rem; }
+      .map-badge b { font-weight: 600; }
+      .map-badge span { color: #6b6257; }
+      .map-ignored { color: #6b6257; font-size: 0.85rem; margin-top: 8px; }
+
+      .import-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+      .stat-card { padding: 16px; border-radius: 14px; background: #fff; border: 1px solid rgba(0,0,0,0.06); text-align: center; }
+      .stat-card span { display: block; font-size: 0.8rem; color: #6b6257; text-transform: uppercase; letter-spacing: 0.04em; }
+      .stat-card strong { display: block; font-size: 1.8rem; margin-top: 4px; }
+      .stat-card.is-new strong { color: #2e7d51; }
+      .stat-card.is-update strong { color: #8a6a3d; }
+      .stat-card.is-error strong { color: #b23b3b; }
+
+      .preview-table-wrap { overflow-x: auto; }
+      table.preview-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+      table.preview-table th, table.preview-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.07); white-space: nowrap; }
+      table.preview-table th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b6257; }
+      .badge { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+      .badge-new { background: rgba(46, 125, 81, 0.14); color: #2e7d51; }
+      .badge-update { background: rgba(138, 106, 61, 0.16); color: #8a6a3d; }
+
+      .import-errors { border: 1px solid rgba(178, 59, 59, 0.25); background: rgba(178, 59, 59, 0.05); border-radius: 14px; padding: 14px 16px; }
+      .import-errors ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.88rem; }
+
+      .import-option { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; background: rgba(0,0,0,0.03); }
+      .import-option input { margin-top: 3px; }
+      .import-option small { display: block; color: #6b6257; }
+
+      .import-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+      .progress-track { height: 20px; border-radius: 999px; background: rgba(0,0,0,0.08); overflow: hidden; }
+      .progress-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #b98f57, #8a6a3d); transition: width 0.4s ease; }
+      .progress-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 0.9rem; color: #4a443c; }
+      .progress-done { display: grid; gap: 6px; }
+
+      table.logs-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+      table.logs-table th, table.logs-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.07); white-space: nowrap; }
+      table.logs-table th { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b6257; }
+      .logs-table .err-link { color: #b23b3b; font-weight: 600; }
+      .import-cta { text-decoration: none; }
+    </style>
+  </head>
+  <body class="admin-page">
+    <header class="site-header admin-header">
+      <a class="brand-link admin-brand logo-link" href="/admin" aria-label="Donna Admin">
+        <img class="brand-logo brand-logo-admin" src="/assets/brand/donna-horizontal-brown.png" alt="Donna Semijoias" />
+        <span>Portal</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegacao administrativa">
+        <a href="/admin/produtos">Produtos</a>
+        <a href="/admin/vendas">Vendas</a>
+        <a href="/admin/conteudo">Conteudo</a>
+        <a class="active" href="/admin/importar">Importar</a>
+        <button class="nav-pill" id="logoutBtn" type="button">Sair</button>
+      </nav>
+    </header>
+
+    <main class="admin-console">
+      <section class="admin-hero-panel">
+        <div>
+          <p class="eyebrow">Catalogo Donna</p>
+          <h1>Importar catalogo</h1>
+          <p>
+            Envie a planilha do fornecedor (XLSX, XLS ou CSV) e cadastre milhares
+            de produtos de uma vez. O sistema reconhece as colunas sozinho, mostra
+            uma previa antes de gravar e nunca duplica: se o SKU ja existe, ele
+            apenas atualiza o produto.
+          </p>
+        </div>
+      </section>
+
+      <!-- Passo 1: upload -->
+      <section class="admin-panel import-panel" id="stepUpload">
+        <div class="admin-form-heading">
+          <div>
+            <p class="eyebrow">Passo 1</p>
+            <h2>Enviar planilha</h2>
+          </div>
+        </div>
+        <label class="import-dropzone" id="dropzone">
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.xlsb" hidden />
+          <span class="dz-icon" aria-hidden="true">&#128228;</span>
+          <strong>Arraste a planilha aqui</strong>
+          <span>ou clique para escolher &mdash; XLSX, XLS ou CSV (ate 25 MB)</span>
+        </label>
+        <p class="muted">
+          Nao precisa formatar nada: colunas como <em>Codigo, SKU, Ref</em> viram o SKU;
+          <em>Preco, Valor</em> viram o preco; <em>Quantidade, Estoque</em> viram o estoque, e assim por diante.
+        </p>
+        <p class="form-message" id="uploadMsg" role="status"></p>
+      </section>
+
+      <!-- Passo 2: previa -->
+      <section class="admin-panel import-panel" id="stepPreview" hidden>
+        <div class="admin-form-heading">
+          <div>
+            <p class="eyebrow">Passo 2</p>
+            <h2>Conferir antes de importar</h2>
+          </div>
+          <button class="btn btn-soft" id="cancelPreviewBtn" type="button">Trocar arquivo</button>
+        </div>
+
+        <p id="previewFileInfo" class="muted"></p>
+
+        <div>
+          <p class="eyebrow">Colunas reconhecidas</p>
+          <div class="map-badges" id="mapBadges"></div>
+          <p class="map-ignored" id="mapIgnored"></p>
+        </div>
+
+        <div class="import-stats" id="importStats"></div>
+
+        <p id="truncatedWarn" class="form-message" hidden></p>
+
+        <div class="preview-table-wrap">
+          <table class="preview-table">
+            <thead>
+              <tr><th>Acao</th><th>SKU</th><th>Nome</th><th>Categoria</th><th>Preco</th><th>Estoque</th></tr>
+            </thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+        </div>
+
+        <div class="import-errors" id="errorsBox" hidden>
+          <strong id="errorsTitle"></strong>
+          <p class="muted">Essas linhas serao puladas. As demais serao importadas normalmente.</p>
+          <ul id="errorsList"></ul>
+        </div>
+
+        <label class="import-option">
+          <input type="checkbox" id="deactivateMissing" />
+          <span>
+            <b>Desativar produtos que nao vieram neste catalogo</b>
+            <small>
+              Produtos com SKU que nao estiverem na planilha ficam ocultos da loja
+              (status rascunho). Nada e apagado, e produtos cadastrados manualmente
+              (sem SKU) nao sao afetados.
+            </small>
+          </span>
+        </label>
+
+        <div class="import-actions">
+          <button class="btn btn-dark" id="confirmBtn" type="button">Confirmar importacao</button>
+          <button class="btn btn-light" id="cancelPreviewBtn2" type="button">Cancelar</button>
+        </div>
+        <p class="form-message" id="commitMsg" role="status"></p>
+      </section>
+
+      <!-- Passo 3: progresso -->
+      <section class="admin-panel import-panel" id="stepProgress" hidden>
+        <div class="admin-form-heading">
+          <div>
+            <p class="eyebrow">Passo 3</p>
+            <h2 id="progressTitle">Importando...</h2>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-meta">
+          <span id="progressPercent">0%</span>
+          <span id="progressCount">0 de 0</span>
+          <span id="progressEta"></span>
+        </div>
+        <div class="progress-done" id="progressDone" hidden></div>
+        <div class="import-actions" id="progressActions" hidden>
+          <a class="btn btn-dark" href="/admin/produtos">Ver produtos</a>
+          <button class="btn btn-soft" id="againBtn" type="button">Importar outro arquivo</button>
+        </div>
+      </section>
+
+      <!-- Historico -->
+      <section class="admin-panel import-panel">
+        <div class="admin-form-heading">
+          <div>
+            <p class="eyebrow">Historico</p>
+            <h2>Importacoes recentes</h2>
+          </div>
+          <button class="btn btn-soft" id="reloadLogsBtn" type="button">Atualizar</button>
+        </div>
+        <div class="preview-table-wrap">
+          <table class="logs-table">
+            <thead>
+              <tr><th>Data</th><th>Arquivo</th><th>Novos</th><th>Atualizados</th><th>Ignorados</th><th>Erros</th><th>Desativados</th><th>Tempo</th><th>Relatorio</th></tr>
+            </thead>
+            <tbody id="logsBody"></tbody>
+          </table>
+        </div>
+        <p class="muted" id="logsEmpty" hidden>Nenhuma importacao ainda.</p>
+      </section>
+    </main>
+
+    <script>
+      const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+      let currentUploadId = null;
+      let pollTimer = null;
+
+      function $(id) { return document.getElementById(id); }
+      function escapeHtml(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+        }[c]));
+      }
+      function show(id, on) { $(id).hidden = !on; }
+      function fmtPrice(v) { return (v == null || v === '') ? '-' : currency.format(Number(v)); }
+      function fmtDuration(ms) {
+        const s = Math.round((ms || 0) / 1000);
+        if (s < 60) return s + 's';
+        return Math.floor(s / 60) + 'min ' + (s % 60) + 's';
+      }
+
+      // ---------- Passo 1: upload ----------
+      const dropzone = $('dropzone');
+      const fileInput = $('fileInput');
+
+      ['dragenter', 'dragover'].forEach((ev) => dropzone.addEventListener(ev, (e) => {
+        e.preventDefault(); dropzone.classList.add('is-drag');
+      }));
+      ['dragleave', 'drop'].forEach((ev) => dropzone.addEventListener(ev, (e) => {
+        e.preventDefault(); dropzone.classList.remove('is-drag');
+      }));
+      dropzone.addEventListener('drop', (e) => {
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files && fileInput.files[0];
+        if (file) handleFile(file);
+        fileInput.value = '';
+      });
+
+      function handleFile(file) {
+        const okExt = /\.(xlsx|xls|xlsb|csv)$/i.test(file.name);
+        if (!okExt) { $('uploadMsg').textContent = 'Formato nao suportado. Envie XLSX, XLS ou CSV.'; return; }
+        if (file.size > 25 * 1024 * 1024) { $('uploadMsg').textContent = 'Arquivo muito grande (limite de 25 MB).'; return; }
+
+        $('uploadMsg').textContent = 'Analisando ' + file.name + '...';
+        const reader = new FileReader();
+        reader.onload = () => sendPreview(file.name, reader.result);
+        reader.onerror = () => { $('uploadMsg').textContent = 'Nao foi possivel ler o arquivo.'; };
+        reader.readAsDataURL(file);
+      }
+
+      async function sendPreview(filename, dataUrl) {
+        try {
+          const res = await fetch('/api/import/preview', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename, data: dataUrl })
+          });
+          const result = await res.json().catch(() => ({}));
+          if (!res.ok) { $('uploadMsg').textContent = result.error || 'Falha ao analisar o arquivo.'; return; }
+          $('uploadMsg').textContent = '';
+          renderPreview(result);
+        } catch (err) {
+          $('uploadMsg').textContent = 'Falha de conexao ao enviar o arquivo.';
+        }
+      }
+
+      // ---------- Passo 2: previa ----------
+      function renderPreview(data) {
+        currentUploadId = data.uploadId;
+
+        $('previewFileInfo').textContent = 'Arquivo: ' + data.filename + (data.sheet ? ' (aba "' + data.sheet + '")' : '');
+
+        $('mapBadges').innerHTML = (data.mapping.recognized || []).map((r) =>
+          `<span class="map-badge"><b>${escapeHtml(r.column)}</b><span>&rarr; ${escapeHtml(r.label)}</span></span>`
+        ).join('') || '<span class="muted">Nenhuma coluna reconhecida.</span>';
+
+        const ignored = data.mapping.ignored || [];
+        $('mapIgnored').textContent = ignored.length ? ('Colunas ignoradas: ' + ignored.join(', ')) : '';
+
+        const s = data.stats;
+        $('importStats').innerHTML = [
+          { label: 'Encontrados', value: s.found, cls: '' },
+          { label: 'Novos', value: s.willInsert, cls: 'is-new' },
+          { label: 'Atualizar', value: s.willUpdate, cls: 'is-update' },
+          { label: 'Ignorados', value: s.ignored, cls: '' },
+          { label: 'Com erro', value: s.errors, cls: 'is-error' }
+        ].map((c) => `<div class="stat-card ${c.cls}"><span>${c.label}</span><strong>${c.value}</strong></div>`).join('');
+
+        if (data.truncated) {
+          $('truncatedWarn').hidden = false;
+          $('truncatedWarn').textContent = 'Atencao: o arquivo tem mais de ' + data.maxRows + ' linhas. Apenas as primeiras ' + data.maxRows + ' serao importadas.';
+        } else {
+          $('truncatedWarn').hidden = true;
+        }
+
+        $('previewBody').innerHTML = (data.sample || []).map((r) => `
+          <tr>
+            <td><span class="badge ${r.action === 'insert' ? 'badge-new' : 'badge-update'}">${r.action === 'insert' ? 'Novo' : 'Atualiza'}</span></td>
+            <td>${escapeHtml(r.sku || '-')}</td>
+            <td>${escapeHtml(r.name || '-')}</td>
+            <td>${escapeHtml(r.category || '-')}</td>
+            <td>${fmtPrice(r.price)}</td>
+            <td>${r.stock == null ? '-' : escapeHtml(r.stock)}</td>
+          </tr>`).join('');
+
+        const errors = data.errors || [];
+        if (errors.length) {
+          show('errorsBox', true);
+          $('errorsTitle').textContent = errors.length + ' linha(s) com erro';
+          $('errorsList').innerHTML = errors.slice(0, 20).map((e) =>
+            `<li>Linha ${escapeHtml(e.row)}: ${escapeHtml(e.reason)}${e.name ? ' (' + escapeHtml(e.name) + ')' : ''}</li>`
+          ).join('') + (errors.length > 20 ? '<li>...</li>' : '');
+        } else {
+          show('errorsBox', false);
+        }
+
+        $('confirmBtn').disabled = (s.willInsert + s.willUpdate) === 0;
+        $('commitMsg').textContent = (s.willInsert + s.willUpdate) === 0 ? 'Nenhum produto valido para importar.' : '';
+
+        show('stepUpload', false);
+        show('stepPreview', true);
+        show('stepProgress', false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function backToUpload() {
+        currentUploadId = null;
+        show('stepPreview', false);
+        show('stepProgress', false);
+        show('stepUpload', true);
+        $('uploadMsg').textContent = '';
+      }
+      $('cancelPreviewBtn').addEventListener('click', backToUpload);
+      $('cancelPreviewBtn2').addEventListener('click', backToUpload);
+
+      // ---------- Passo 3: commit + progresso ----------
+      $('confirmBtn').addEventListener('click', async () => {
+        if (!currentUploadId) return;
+        $('confirmBtn').disabled = true;
+        $('commitMsg').textContent = 'Iniciando importacao...';
+        try {
+          const res = await fetch('/api/import/commit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uploadId: currentUploadId, deactivateMissing: $('deactivateMissing').checked })
+          });
+          const result = await res.json().catch(() => ({}));
+          if (!res.ok || !result.jobId) { $('commitMsg').textContent = result.error || 'Nao foi possivel iniciar.'; $('confirmBtn').disabled = false; return; }
+          startProgress(result.jobId);
+        } catch (err) {
+          $('commitMsg').textContent = 'Falha de conexao.';
+          $('confirmBtn').disabled = false;
+        }
+      });
+
+      function startProgress(jobId) {
+        show('stepPreview', false);
+        show('stepProgress', true);
+        show('progressDone', false);
+        show('progressActions', false);
+        $('progressTitle').textContent = 'Importando...';
+        $('progressFill').style.width = '0%';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        poll(jobId);
+      }
+
+      async function poll(jobId) {
+        try {
+          const res = await fetch('/api/import/jobs/' + encodeURIComponent(jobId));
+          const job = await res.json().catch(() => ({}));
+          if (!res.ok) { $('progressTitle').textContent = job.error || 'Importacao nao encontrada.'; return; }
+
+          $('progressFill').style.width = job.percent + '%';
+          $('progressPercent').textContent = job.percent + '%';
+          $('progressCount').textContent = job.processed + ' de ' + job.total;
+          $('progressEta').textContent = job.status === 'running' && job.etaMs ? ('~' + fmtDuration(job.etaMs) + ' restantes') : '';
+
+          if (job.status === 'running') {
+            pollTimer = setTimeout(() => poll(jobId), 700);
+            return;
+          }
+
+          // terminou (done ou error)
+          if (job.status === 'error') {
+            $('progressTitle').textContent = 'A importacao encontrou um problema';
+          } else {
+            $('progressTitle').textContent = 'Importacao concluida!';
+          }
+          show('progressDone', true);
+          $('progressDone').innerHTML = [
+            '<strong>' + job.inserted + ' produto(s) novo(s) criado(s)</strong>',
+            '<span>' + job.updated + ' produto(s) atualizado(s)</span>',
+            job.deactivated ? '<span>' + job.deactivated + ' produto(s) desativado(s)</span>' : '',
+            job.errors ? '<span>' + job.errors + ' linha(s) com erro (baixe o relatorio no historico)</span>' : '',
+            '<span>Tempo: ' + fmtDuration(job.elapsedMs) + '</span>',
+            job.message ? '<span>' + escapeHtml(job.message) + '</span>' : ''
+          ].filter(Boolean).join('');
+          show('progressActions', true);
+          loadLogs();
+        } catch (err) {
+          $('progressTitle').textContent = 'Falha de conexao ao acompanhar o progresso.';
+        }
+      }
+
+      $('againBtn').addEventListener('click', backToUpload);
+
+      // ---------- Historico ----------
+      async function loadLogs() {
+        try {
+          const res = await fetch('/api/import/logs');
+          const logs = await res.json().catch(() => []);
+          if (!Array.isArray(logs) || !logs.length) {
+            $('logsBody').innerHTML = '';
+            show('logsEmpty', true);
+            return;
+          }
+          show('logsEmpty', false);
+          $('logsBody').innerHTML = logs.map((l) => `
+            <tr>
+              <td>${escapeHtml(l.created_at)}</td>
+              <td>${escapeHtml(l.filename)}</td>
+              <td>${escapeHtml(l.inserted)}</td>
+              <td>${escapeHtml(l.updated)}</td>
+              <td>${escapeHtml(l.ignored)}</td>
+              <td>${escapeHtml(l.errors)}</td>
+              <td>${escapeHtml(l.deactivated)}</td>
+              <td>${fmtDuration(l.duration_ms)}</td>
+              <td>${Number(l.errors) > 0 ? `<a class="err-link" href="/api/import/logs/${l.id}/errors.csv">Baixar CSV</a>` : '-'}</td>
+            </tr>`).join('');
+        } catch (err) {
+          show('logsEmpty', true);
+        }
+      }
+      $('reloadLogsBtn').addEventListener('click', loadLogs);
+
+      $('logoutBtn').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/';
+      });
+
+      loadLogs();
+    </script>
+  </body>
+</html>

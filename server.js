@@ -4,6 +4,7 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const compression = require('compression');
 const db = require('./db');
+const importService = require('./lib/import/importService');
 
 const app = express();
 app.use(compression());
@@ -139,6 +140,9 @@ async function initDatabase() {
   await runOnce('warranty-6m-to-1y-v1', async () => {
     await q("UPDATE products SET details = REPLACE(details, '6 meses', '1 ano') WHERE details LIKE '%6 meses%'");
   });
+  // Modulo de Importacao de Catalogo: colunas novas (sku/custo/fornecedor),
+  // indice unico de SKU e tabela de historico. Idempotente.
+  await importService.ensureSchema();
 }
 
 // Executa uma acao uma unica vez, controlada por uma chave em store_meta.
@@ -443,6 +447,7 @@ app.get('/admin', requireAdmin, (req, res) => res.redirect('/admin/produtos'));
 app.get('/admin/produtos', requireAdmin, (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
 app.get('/admin/vendas', requireAdmin, (req, res) => res.sendFile(path.join(__dirname, 'sales.html')));
 app.get('/admin/conteudo', requireAdmin, (req, res) => res.sendFile(path.join(__dirname, 'content.html')));
+app.get('/admin/importar', requireAdmin, (req, res) => res.sendFile(path.join(__dirname, 'import.html')));
 app.get('/dashboard', requireAdmin, (req, res) => res.redirect('/admin/produtos'));
 
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'register.html')));
@@ -571,6 +576,81 @@ app.delete('/api/products/:id', requireAdmin, async (req, res) => {
     res.json({ success: true, deleted: result.rowCount });
   } catch (err) {
     res.status(500).json({ error: 'Erro ao remover produto.' });
+  }
+});
+
+// ============================================================
+// Importacao de Catalogo
+// (upload -> preview -> commit em segundo plano -> logs)
+// ============================================================
+
+// Recebe o arquivo em base64 (JSON), analisa e devolve o preview sem gravar.
+app.post('/api/import/preview', requireAdmin, async (req, res) => {
+  const filename = String(req.body.filename || 'catalogo').trim();
+  const data = String(req.body.data || '');
+  if (!data) return res.status(400).json({ error: 'Envie um arquivo XLSX, XLS ou CSV.' });
+
+  let buffer;
+  try {
+    // Aceita "data:...;base64,XXXX" ou o base64 puro.
+    const base64 = data.includes(',') ? data.slice(data.indexOf(',') + 1) : data;
+    buffer = Buffer.from(base64, 'base64');
+  } catch (err) {
+    return res.status(400).json({ error: 'Arquivo invalido.' });
+  }
+  if (!buffer.length) return res.status(400).json({ error: 'Arquivo vazio.' });
+  if (buffer.length > 25 * 1024 * 1024) {
+    return res.status(413).json({ error: 'Arquivo muito grande (limite de 25 MB).' });
+  }
+
+  try {
+    const preview = await importService.preparePreview(buffer, filename, req.session.adminEmail || '');
+    res.json(preview);
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Nao foi possivel ler o arquivo.' });
+  }
+});
+
+// Confirma a importacao: grava em lote, em segundo plano.
+app.post('/api/import/commit', requireAdmin, (req, res) => {
+  const uploadId = String(req.body.uploadId || '');
+  const deactivateMissing = req.body.deactivateMissing === true || req.body.deactivateMissing === 'true';
+  if (!uploadId) return res.status(400).json({ error: 'Sessao de importacao invalida.' });
+  try {
+    const jobId = importService.startCommit(uploadId, { deactivateMissing }, req.session.adminEmail || '');
+    res.json({ success: true, jobId });
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Nao foi possivel iniciar a importacao.' });
+  }
+});
+
+// Progresso da importacao (o painel consulta em intervalos).
+app.get('/api/import/jobs/:id', requireAdmin, (req, res) => {
+  const job = importService.getJob(String(req.params.id));
+  if (!job) return res.status(404).json({ error: 'Importacao nao encontrada.' });
+  res.json(job);
+});
+
+// Historico das importacoes.
+app.get('/api/import/logs', requireAdmin, async (req, res) => {
+  try {
+    res.json(await importService.listLogs(50));
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao buscar historico.' });
+  }
+});
+
+// Baixa o CSV de erros de uma importacao.
+app.get('/api/import/logs/:id/errors.csv', requireAdmin, async (req, res) => {
+  try {
+    const data = await importService.getLogErrors(req.params.id);
+    if (!data) return res.status(404).send('Importacao nao encontrada.');
+    const csv = importService.errorsToCsv(data.errors || []);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="erros-importacao-${Number(req.params.id)}.csv"`);
+    res.send(csv);
+  } catch (err) {
+    res.status(500).send('Erro ao gerar o relatorio.');
   }
 });
 
