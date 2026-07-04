@@ -930,6 +930,18 @@ h3 {
   height: auto;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .gift-band p {
   color: rgba(255, 255, 255, 0.74);
   margin-bottom: 28px;
