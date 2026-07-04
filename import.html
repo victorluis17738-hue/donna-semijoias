@@ -106,14 +106,16 @@
           </div>
         </div>
         <label class="import-dropzone" id="dropzone">
-          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.xlsb" hidden />
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.xlsb,.pdf" hidden />
           <span class="dz-icon" aria-hidden="true">&#128228;</span>
           <strong>Arraste a planilha aqui</strong>
-          <span>ou clique para escolher &mdash; XLSX, XLS ou CSV (ate 25 MB)</span>
+          <span>ou clique para escolher &mdash; XLSX, XLS, CSV ou PDF (ate 22 MB)</span>
         </label>
         <p class="muted">
           Nao precisa formatar nada: colunas como <em>Codigo, SKU, Ref</em> viram o SKU;
           <em>Preco, Valor</em> viram o preco; <em>Quantidade, Estoque</em> viram o estoque, e assim por diante.
+          No PDF, o sistema le tabelas de preco (melhor esforco) &mdash; sempre confira a previa antes de confirmar.
+          PDF escaneado (imagem) nao tem texto: nesse caso use Excel ou CSV.
         </p>
         <p class="form-message" id="uploadMsg" role="status"></p>
       </section>
@@ -256,9 +258,9 @@
       });
 
       function handleFile(file) {
-        const okExt = /\.(xlsx|xls|xlsb|csv)$/i.test(file.name);
-        if (!okExt) { $('uploadMsg').textContent = 'Formato nao suportado. Envie XLSX, XLS ou CSV.'; return; }
-        if (file.size > 25 * 1024 * 1024) { $('uploadMsg').textContent = 'Arquivo muito grande (limite de 25 MB).'; return; }
+        const okExt = /\.(xlsx|xls|xlsb|csv|pdf)$/i.test(file.name);
+        if (!okExt) { $('uploadMsg').textContent = 'Formato nao suportado. Envie XLSX, XLS, CSV ou PDF.'; return; }
+        if (file.size > 22 * 1024 * 1024) { $('uploadMsg').textContent = 'Arquivo muito grande (limite de 22 MB).'; return; }
 
         $('uploadMsg').textContent = 'Analisando ' + file.name + '...';
         const reader = new FileReader();

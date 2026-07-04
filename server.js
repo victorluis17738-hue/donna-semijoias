@@ -20,7 +20,9 @@ const STORE_WHATSAPP = String(process.env.STORE_WHATSAPP || '').replace(/\D/g, '
 
 const q = (text, params) => db.query(text, params);
 
-app.use(express.json({ limit: '24mb' }));
+// 32mb no JSON acomoda o upload da importacao em base64 (arquivo de ate ~22 MB,
+// que infla ~33% ao virar base64) sem que o Express corte antes da checagem amigavel.
+app.use(express.json({ limit: '32mb' }));
 app.use(express.urlencoded({ extended: true, limit: '24mb' }));
 app.use(session({
   secret: SESSION_SECRET,
@@ -599,8 +601,8 @@ app.post('/api/import/preview', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'Arquivo invalido.' });
   }
   if (!buffer.length) return res.status(400).json({ error: 'Arquivo vazio.' });
-  if (buffer.length > 25 * 1024 * 1024) {
-    return res.status(413).json({ error: 'Arquivo muito grande (limite de 25 MB).' });
+  if (buffer.length > 22 * 1024 * 1024) {
+    return res.status(413).json({ error: 'Arquivo muito grande (limite de 22 MB). Divida o catalogo em partes menores.' });
   }
 
   try {
